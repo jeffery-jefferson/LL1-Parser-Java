@@ -1,6 +1,7 @@
 package Automata;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.HashMap;
 
 import Exceptions.ExpressionException;
@@ -111,5 +112,28 @@ public class Dfa implements IAutomata {
         var state = this.GetState(stateName);
         this.StartState = state;
         this.CurrentState = state;
+    }
+
+    public void SetStartState(State state) {
+        if (this.States.contains(state)) {
+            this.StartState = state;
+            this.CurrentState = state;
+        } else {
+            throw new UnsupportedOperationException("Cannot set an unregistered state as the start state. Please add this state first using Dfa.AddState(State state).");
+        }
+    }
+
+    @Override
+    public void AddStates(List<State> states) {
+        for (var state : states) {
+            AddState(state);
+        }
+    }
+
+    @Override
+    public void AddAcceptStates(List<State> states) {
+        for (var state : states) {
+            AddAcceptState(state);
+        }
     }
 }
