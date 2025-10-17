@@ -1,8 +1,11 @@
 import java.util.List;
 
 import Automata.Dfa;
+import Exceptions.ExpressionException;
+import Exceptions.NumberException;
 import LexicalAnalyser.Lexer;
 import Models.State;
+import Models.Token;
 
 public class Program {
     public static void Main(String[] args) {
@@ -14,7 +17,14 @@ public class Program {
         // another tokenization strategy is to use an FST (Finite-State Transducer)
         // logic is on Lecture 6 slide 13
         // although this seems to enforce whitespaces at places like after operators
-        var tokens = lexer.Tokenize(input); 
+        List<Token> tokens = null;
+        try {
+            tokens = lexer.Tokenize(input); 
+        } catch (NumberException ex) {
+            System.out.println("Malformed number.");
+        } catch (ExpressionException ex) {
+            System.out.println("Invalid expression.");
+        }
 
     }
 
