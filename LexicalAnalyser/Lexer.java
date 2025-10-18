@@ -49,7 +49,7 @@ public class Lexer implements ILexer {
 
 				// Tokenize
 				if (numberBuffer.size() > 0) {
-					var num = CharArrayToDouble(numberBuffer);
+					var num = CharArrayToInteger(numberBuffer);
 					numberBuffer.clear();
 					var token = new Token(num);
 					result.add(token);
@@ -75,7 +75,7 @@ public class Lexer implements ILexer {
 
 		// if there are numbers left in the buffer tokenize this too
 		if (numberBuffer.size() > 0) {
-			result.add(new Token(CharArrayToDouble(numberBuffer)));
+			result.add(new Token(CharArrayToInteger(numberBuffer)));
 		}
 		if (identifierBuffer.size() > 0) {
 			result.add(new Token(CharArrayToString(identifierBuffer)));
@@ -105,12 +105,12 @@ public class Lexer implements ILexer {
 		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 	}
 
-    static Double CharArrayToDouble(ArrayList<Character> charArray) {
+    static Integer CharArrayToInteger(ArrayList<Character> charArray) {
 		StringBuilder sb = new StringBuilder();
         for (char c : charArray) {
             sb.append(c);
         }
-        return Double.parseDouble(sb.toString());
+        return Integer.parseInt(sb.toString());
 	}
 
 	static String CharArrayToString(ArrayList<Character> charArray) {

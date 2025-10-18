@@ -7,11 +7,12 @@ import Exceptions.NumberException;
 import LexicalAnalyser.Lexer;
 import Models.State;
 import Models.Token;
+import Parser.LL1Parser;
 
 public class Program {
     public static void main(String[] args) {
-
-        var input = "(+ (func 1) (func2 1))";
+        
+        var input = "((1 2) (3 4))";
         // Scanner scanner = new Scanner(System.in);
         // System.out.print("Enter MiniLisp Expression: ");
         // var input = scanner.nextLine();
@@ -37,7 +38,15 @@ public class Program {
         System.out.println("Finished Tokenizing.");
         System.out.println("Tokens: " + tokens.toString());
 
-        // now parse tree
+        // now parse + parse tree
+        var parser = new LL1Parser(input);
+        System.out.println("Starting LL1 Parsing.");
+        try {
+            parser.Parse(tokens);
+        } catch (ExpressionException ex) {
+            System.out.println("Invalid expression: " + ex.getMessage());
+        }
+        System.out.println("Finished LL1 Parsing");
     }
 
     static void setupDFA(Dfa dfa) {
@@ -59,7 +68,7 @@ public class Program {
 
         dfa.AddStates(states);
         dfa.AddAcceptStates(List.of(start, number, identifier, closeParentheses));
-
+        
         dfa.SetStartState(start);
 
         for (int i = 1; i < 10; i++) {
@@ -100,6 +109,7 @@ public class Program {
         dfa.AddTransition(number, openParentheses, '(');
         dfa.AddTransition(identifier, openParentheses, '(');
         dfa.AddTransition(whitespace, openParentheses, '(');
+        dfa.AddTransition(openParentheses, openParentheses, '(');
 
         for (var op : operators) {
             dfa.AddTransition(openParentheses, operator, op);
