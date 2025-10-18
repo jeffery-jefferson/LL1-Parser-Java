@@ -53,6 +53,8 @@ public class Lexer implements ILexer {
 			}
 		}
 
+		System.out.println("Finished Processing.");
+
 		// if there are numbers left in the buffer tokenize this too
 		if (numberBuffer.size() > 0) {
 			result.add(new Token(CharArrayToDouble(numberBuffer)));

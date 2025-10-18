@@ -42,7 +42,7 @@ public class Dfa implements IAutomata {
         var nextState = this.Transitions.get(transitionPair);
 
         if (nextState == null) { // i.e. invalid transition pair
-            throw new ExpressionException();
+            throw new ExpressionException("Invalid transition. Please add a transition pair for state " + transitionPair.FromState.Name + " with input character " + transitionPair.TransitionCharacter.toString());
         }
 
         this.currentCharacterIndex++;

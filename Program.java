@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Scanner;
 
 import Automata.Dfa;
 import Exceptions.ExpressionException;
@@ -8,10 +9,16 @@ import Models.State;
 import Models.Token;
 
 public class Program {
-    public static void Main(String[] args) {
-        var input = "";
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter MiniLisp Expression: ");
+        var input = scanner.nextLine();
+        scanner.close();
 
         var dfa = new Dfa(input);
+        setupDFA(dfa);
+
         var lexer = new Lexer(dfa);
 
         // another tokenization strategy is to use an FST (Finite-State Transducer)
@@ -21,11 +28,10 @@ public class Program {
         try {
             tokens = lexer.Tokenize(input); 
         } catch (NumberException ex) {
-            System.out.println("Malformed number.");
+            System.out.println("Malformed number: " + ex.getMessage());
         } catch (ExpressionException ex) {
-            System.out.println("Invalid expression.");
+            System.out.println("Invalid expression: " + ex.getMessage());
         }
-
     }
 
     static void setupDFA(Dfa dfa) {
@@ -78,6 +84,8 @@ public class Program {
             dfa.AddTransition(let, identifier, (char)('A' + i));
             dfa.AddTransition(whitespace, identifier, (char)('a' + i));
             dfa.AddTransition(whitespace, identifier, (char)('A' + i));
+            dfa.AddTransition(identifier, whitespace, (char)('a' + i));
+            dfa.AddTransition(identifier, whitespace, (char)('A' + i));
         }
 
         dfa.AddTransition(start, openParentheses, '(');
