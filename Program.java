@@ -24,14 +24,18 @@ public class Program {
         // another tokenization strategy is to use an FST (Finite-State Transducer)
         // logic is on Lecture 6 slide 13
         // although this seems to enforce whitespaces at places like after operators
+        System.out.println("Tokenizing...");
         List<Token> tokens = null;
         try {
-            tokens = lexer.Tokenize(input); 
+            tokens = lexer.Tokenize(input);
         } catch (NumberException ex) {
             System.out.println("Malformed number: " + ex.getMessage());
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
         }
+        System.out.println("Finished Tokenizing.");
+
+        // now parse tree
     }
 
     static void setupDFA(Dfa dfa) {
@@ -91,6 +95,7 @@ public class Program {
         dfa.AddTransition(start, openParentheses, '(');
         dfa.AddTransition(number, openParentheses, '(');
         dfa.AddTransition(identifier, openParentheses, '(');
+        dfa.AddTransition(whitespace, openParentheses, '(');
 
         for (var op : operators) {
             dfa.AddTransition(openParentheses, operator, op);
@@ -103,13 +108,11 @@ public class Program {
         dfa.AddTransition(whitespace, let, letOperator);
 
         for (var state : states) {
-            if (state != closeParentheses) {
-                dfa.AddTransition(state, whitespace, ' ');
-            }
+            dfa.AddTransition(state, whitespace, ' ');
         }
 
-        dfa.AddTransition(whitespace, closeParentheses, '(');
-        dfa.AddTransition(number, closeParentheses, '(');
-        dfa.AddTransition(closeParentheses, closeParentheses, '(');
+        dfa.AddTransition(whitespace, closeParentheses, ')');
+        dfa.AddTransition(number, closeParentheses, ')');
+        dfa.AddTransition(closeParentheses, closeParentheses, ')');
     }
 }

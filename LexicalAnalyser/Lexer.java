@@ -46,33 +46,31 @@ public class Lexer implements ILexer {
 				}
 
 			} catch (ExpressionException ex) {
-				if (numberBuffer.size() > 0 || dfa.GetCurrentCharacter().equals('.')) {
-					throw new NumberException();
+				if (numberBuffer.size() > 0) {
+					throw new NumberException("Line 50");
 				}
 				throw ex;
 			}
 		}
 
-		System.out.println("Finished Processing.");
-
 		// if there are numbers left in the buffer tokenize this too
 		if (numberBuffer.size() > 0) {
 			result.add(new Token(CharArrayToDouble(numberBuffer)));
 		}
-
+		
 		// now check if we can accept at this finished state 
 		if (!dfa.CanAccept()) {
 			if (numberBuffer.size() > 0) {
-				throw new NumberException();
+				throw new NumberException("Line 64");
 			}
-			throw new ExpressionException();
+			throw new ExpressionException("Line 66");
 		}
 
 		return result;
     }
 
     static boolean IsNumber(char c) {
-		return (int)c >= 30 && (int)c <= 39;
+		return c >= (char)('0') && c <= (char)('9');
 	}
 
 	static boolean IsWhitespace(char c) {
