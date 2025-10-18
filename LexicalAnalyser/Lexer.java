@@ -23,14 +23,28 @@ public class Lexer implements ILexer {
 		// Tokenising logic
 		var result = new ArrayList<Token>();
 		var numberBuffer = new ArrayList<Character>();
+		var identifierBuffer = new ArrayList<Character>();
+		var isProcessingIdentifier = false;
 		while (!dfa.IsFinished()) {
 			try {
 				var processedChar = dfa.Next().charValue();
 				System.out.println("Processed: '" + processedChar + "', now on state: " + dfa.CurrentState);
 				// Collect numbers in the buffer
 				if (IsNumber(processedChar)) {
-					numberBuffer.add(processedChar);
+					if (isProcessingIdentifier) {
+						identifierBuffer.add(processedChar);
+					} else {
+						numberBuffer.add(processedChar);
+					}
 					continue;
+				}
+
+				if (IsAlphabet(processedChar)) {
+					isProcessingIdentifier = true;
+					identifierBuffer.add(processedChar);
+					continue;
+				} else {
+					isProcessingIdentifier = false;
 				}
 
 				// Tokenize
@@ -38,6 +52,12 @@ public class Lexer implements ILexer {
 					var num = CharArrayToDouble(numberBuffer);
 					numberBuffer.clear();
 					var token = new Token(num);
+					result.add(token);
+				}
+				if (identifierBuffer.size() > 0) {
+					var identifier = CharArrayToString(identifierBuffer);
+					identifierBuffer.clear();
+					var token = new Token(identifier);
 					result.add(token);
 				}
 				if (!IsWhitespace(processedChar)) {
@@ -57,6 +77,10 @@ public class Lexer implements ILexer {
 		if (numberBuffer.size() > 0) {
 			result.add(new Token(CharArrayToDouble(numberBuffer)));
 		}
+		if (identifierBuffer.size() > 0) {
+			result.add(new Token(CharArrayToString(identifierBuffer)));
+		}
+
 		
 		// now check if we can accept at this finished state 
 		if (!dfa.CanAccept()) {
@@ -77,11 +101,23 @@ public class Lexer implements ILexer {
 		return c == ' ';
 	}
 
+	static boolean IsAlphabet(char c) {
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+	}
+
     static Double CharArrayToDouble(ArrayList<Character> charArray) {
 		StringBuilder sb = new StringBuilder();
         for (char c : charArray) {
             sb.append(c);
         }
         return Double.parseDouble(sb.toString());
+	}
+
+	static String CharArrayToString(ArrayList<Character> charArray) {
+		StringBuilder sb = new StringBuilder();
+        for (char c : charArray) {
+            sb.append(c);
+        }
+        return sb.toString();
 	}
 }

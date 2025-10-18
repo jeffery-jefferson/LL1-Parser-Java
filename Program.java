@@ -11,10 +11,11 @@ import Models.Token;
 public class Program {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter MiniLisp Expression: ");
-        var input = scanner.nextLine();
-        scanner.close();
+        var input = "(+ (func 1) (func2 1))";
+        // Scanner scanner = new Scanner(System.in);
+        // System.out.print("Enter MiniLisp Expression: ");
+        // var input = scanner.nextLine();
+        // scanner.close();
 
         var dfa = new Dfa(input);
         setupDFA(dfa);
@@ -34,6 +35,7 @@ public class Program {
             System.out.println("Invalid expression: " + ex.getMessage());
         }
         System.out.println("Finished Tokenizing.");
+        System.out.println("Tokens: " + tokens.toString());
 
         // now parse tree
     }
@@ -90,6 +92,8 @@ public class Program {
             dfa.AddTransition(whitespace, identifier, (char)('A' + i));
             dfa.AddTransition(identifier, whitespace, (char)('a' + i));
             dfa.AddTransition(identifier, whitespace, (char)('A' + i));
+            dfa.AddTransition(openParentheses, identifier, (char)('a' + i));
+            dfa.AddTransition(openParentheses, identifier, (char)('A' + i));
         }
 
         dfa.AddTransition(start, openParentheses, '(');
