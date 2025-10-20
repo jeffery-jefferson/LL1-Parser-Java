@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.Stack;
 
 import Exceptions.ExpressionException;
+import Models.ParseTree;
 import Models.ProductionRule;
 import Models.Token;
 import Models.Token.TokenType;
+import Models.TreeNode;
 
 public class LL1Parser {
     /*
@@ -68,9 +70,13 @@ public class LL1Parser {
         );
     }
 
-    public void Parse(List<Token> tokens) throws ExpressionException {
+    public ParseTree<Token> Parse(List<Token> tokens) throws ExpressionException {
+        var startingToken = nonTerminals.get('S');
+        var root = new TreeNode<Token>(startingToken);
+        var parseTree = new ParseTree<Token>(root);
+
         stack.push(new Token("$"));
-        stack.push(nonTerminals.get('S'));
+        stack.push(startingToken);
 
         var currentInputTokenIndex = 0;
         while (currentInputTokenIndex < tokens.size() && stack.size() != 0) {
@@ -87,6 +93,7 @@ public class LL1Parser {
                     throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
                 }
             } else {
+                // we add to the parse tree here...
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
@@ -97,10 +104,15 @@ public class LL1Parser {
                 for (var token : rule.GetRHS().reversed()) {
                     if (!token.Type.equals(TokenType.EMPTY)) {
                         stack.push(token);
+                        // add to the parse tree's current node
+                        parseTree.Add(new TreeNode<Token>(token));
                     }
                 }
                 System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
+                System.out.println("Parse tree: \n" + parseTree);
             }
         }
+
+        return parseTree;
     }
 }
