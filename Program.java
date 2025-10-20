@@ -12,7 +12,7 @@ import Parser.LL1Parser;
 public class Program {
     public static void main(String[] args) {
         
-        var input = "((1 2) (3 4))";
+        var input = "(× (+ 1 2) 3)";
         // Scanner scanner = new Scanner(System.in);
         // System.out.print("Enter MiniLisp Expression: ");
         // var input = scanner.nextLine();
@@ -32,8 +32,10 @@ public class Program {
             tokens = lexer.Tokenize(input);
         } catch (NumberException ex) {
             System.out.println("Malformed number: " + ex.getMessage());
+            System.exit(999);
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
+            System.exit(888);
         }
         System.out.println("Finished Tokenizing.");
         System.out.println("Tokens: " + tokens.toString());
@@ -45,6 +47,7 @@ public class Program {
             parser.Parse(tokens);
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
+            System.exit(888);
         }
         System.out.println("Finished LL1 Parsing");
     }
@@ -128,5 +131,6 @@ public class Program {
         dfa.AddTransition(whitespace, closeParentheses, ')');
         dfa.AddTransition(number, closeParentheses, ')');
         dfa.AddTransition(closeParentheses, closeParentheses, ')');
+        dfa.AddTransition(zero, closeParentheses, ')');
     }
 }

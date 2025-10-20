@@ -67,7 +67,7 @@ public class Lexer implements ILexer {
 
 			} catch (ExpressionException ex) {
 				if (numberBuffer.size() > 0) {
-					throw new NumberException("Line 50");
+					throw new NumberException("Line 50. Inner Exception: " + ex.getMessage());
 				}
 				throw ex;
 			}

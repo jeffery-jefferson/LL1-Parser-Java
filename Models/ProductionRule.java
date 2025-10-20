@@ -37,4 +37,9 @@ public class ProductionRule {
     public List<Token> GetRHS() {
         return this.RHS;
     }
+
+    @Override
+    public String toString() {
+        return this.LHS + " -> " + this.RHS;
+    }
 }

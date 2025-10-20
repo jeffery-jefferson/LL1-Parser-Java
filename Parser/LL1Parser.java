@@ -84,13 +84,13 @@ public class LL1Parser {
                     currentInputTokenIndex++;
                     stack.pop();
                 } else {
-                    throw new ExpressionException("No production rule for this token.");
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
                 }
             } else {
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
-                    throw new ExpressionException();
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
                 }
 
                 stack.pop();
@@ -99,6 +99,7 @@ public class LL1Parser {
                         stack.push(token);
                     }
                 }
+                System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
             }
         }
     }
