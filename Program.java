@@ -3,8 +3,10 @@ import java.util.Scanner;
 
 import Automata.Dfa;
 import Exceptions.ExpressionException;
+import Exceptions.InvalidNodeException;
 import Exceptions.NumberException;
 import LexicalAnalyser.Lexer;
+import Models.ParseTree;
 import Models.State;
 import Models.Token;
 import Parser.LL1Parser;
@@ -43,13 +45,17 @@ public class Program {
         // now parse + parse tree
         var parser = new LL1Parser(input);
         System.out.println("Starting LL1 Parsing.");
+        ParseTree<Token> result = null;
         try {
-            parser.Parse(tokens);
+            result = parser.Parse(tokens);
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
             System.exit(888);
+        } catch (InvalidNodeException ex) {
+            System.out.println("An error occurred during parse tree generation: " + ex.getMessage());
         }
         System.out.println("Finished LL1 Parsing");
+        System.out.println("Parse tree:\n" + result);
     }
 
     static void setupDFA(Dfa dfa) {
