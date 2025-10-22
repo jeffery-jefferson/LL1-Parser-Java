@@ -6,7 +6,6 @@ import java.util.Stack;
 
 import Exceptions.ExpressionException;
 import Exceptions.InvalidNodeException;
-import Exceptions.InvalidTableOperationException;
 import Models.ParseTree;
 import Models.ProductionRule;
 import Models.Token;
@@ -93,6 +92,7 @@ public class LL1Parser {
         stack.push(startingToken);
 
         var currentInputTokenIndex = 0;
+
         while (currentInputTokenIndex < tokens.size() && stack.size() != 0) {
             System.out.println("Current LL1 Stack: " + stack.toString());
 
@@ -107,8 +107,9 @@ public class LL1Parser {
             parseTree.SetCurrentNode(currentTreeNode);
 
             var currentToken = tokens.get(currentInputTokenIndex);
-            var row = parsingTable.get(top);
-            if (row == null) {
+            var row = parsingTable.GetRow(top.GetValue() != null ? top.GetValue().toString() : top.Type.toString());
+
+            if (row == null || row.isEmpty()) {
                 if (top.Type.equals(currentToken.Type)) {
                     currentInputTokenIndex++;
                     stack.pop();
