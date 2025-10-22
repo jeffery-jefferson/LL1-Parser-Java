@@ -1,9 +1,8 @@
 package Models;
 
-
 public class Token {
 
-    private Object value;
+    private Object val;
     public TokenType Type;
 
     public enum TokenType {
@@ -25,26 +24,27 @@ public class Token {
     }
 
     public Token(Object tokenValue) {
-        this.value = tokenValue;
-        this.Type = GetTokenType(this.value);
+        this.val = tokenValue;
+        this.Type = GetTokenType(this.val);
     }
 
     public Token(TokenType tokenType) {
-        this.value = null;
+        this.val = null;
         this.Type = tokenType;
     }
 
     public Token(Object tokenValue, TokenType tokenType) {
-        this.value = tokenValue;
+        this.val = tokenValue;
         this.Type = tokenType;
+
     }
 
     public Object GetValue() {
-        return this.value;
+        return this.val;
     }
 
     public TokenType GetTokenType(Object value) {
-        var tokenString = this.value.toString();
+        var tokenString = this.val.toString();
         TokenType result = null;
         try {
             Integer.parseInt(tokenString);
@@ -100,20 +100,10 @@ public class Token {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o.getClass() != this.getClass()) {
-            return false;
-        }
-
-        var otherToken = (Token)o;
-        return this.value == otherToken.GetValue();
-    }
-
-    @Override
     public String toString() {
-        if (this.value == null) {
+        if (this.val == null) {
             return this.Type.toString();
         }
-        return this.value.toString();
+        return this.val.toString();
     }
 }

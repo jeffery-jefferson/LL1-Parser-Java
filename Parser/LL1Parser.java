@@ -1,14 +1,16 @@
 package Parser;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import Exceptions.ExpressionException;
+import Exceptions.InvalidNodeException;
+import Models.ParseTree;
 import Models.ProductionRule;
 import Models.Token;
 import Models.Token.TokenType;
+import Models.TreeNode;
 
 public class LL1Parser {
     /*
@@ -21,11 +23,7 @@ public class LL1Parser {
     private Map<Character, Token> nonTerminals;
     private List<ProductionRule> rules;
 
-    private Stack<Token> stack;
-
     public LL1Parser(String inputString) {
-
-        this.stack = new Stack<Token>();
 
         // extract this setup later
         nonTerminals = Map.of(
@@ -68,15 +66,29 @@ public class LL1Parser {
         );
     }
 
-    public void Parse(List<Token> tokens) throws ExpressionException {
+    public ParseTree<Token> Parse(List<Token> tokens) throws ExpressionException, InvalidNodeException {
+        var stack = new Stack<Token>();
+        var startingToken = nonTerminals.get('S');
+        var root = new TreeNode<Token>(startingToken);
+        var parseTree = new ParseTree<Token>(root);
+
         stack.push(new Token("$"));
-        stack.push(nonTerminals.get('S'));
+        stack.push(startingToken);
 
         var currentInputTokenIndex = 0;
         while (currentInputTokenIndex < tokens.size() && stack.size() != 0) {
             System.out.println("Current LL1 Stack: " + stack.toString());
 
             var top = stack.peek();
+            // get current tree node based on stack top token (this is value of tree node)
+            var currentTreeNode = parseTree.GetTreeNodeByValue(top);
+            // if there is no node in the tree of that value then we should throw 
+            // since it should have already been pushed to the stack in the last iteration
+            if (currentTreeNode == null) {
+                throw new ExpressionException("Stack top has a token \"" + top.GetValue() +  "\" which was not found in the parse tree.");
+            }
+            parseTree.SetCurrentNode(currentTreeNode);
+
             var currentToken = tokens.get(currentInputTokenIndex);
             var row = parsingTable.get(top);
             if (row == null) {
@@ -84,23 +96,33 @@ public class LL1Parser {
                     currentInputTokenIndex++;
                     stack.pop();
                 } else {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
             } else {
+                // we add to the parse tree here...
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
 
                 stack.pop();
+                // add to stack in reverse order
                 for (var token : rule.GetRHS().reversed()) {
                     if (!token.Type.equals(TokenType.EMPTY)) {
                         stack.push(token);
                     }
                 }
+                // add to parse tree in correct order
+                for (var token : rule.GetRHS()) {
+                    if (!token.Type.equals(TokenType.EMPTY)) {
+                        parseTree.Add(new TreeNode<Token>(token));
+                    }
+                }
                 System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
             }
         }
+
+        return parseTree;
     }
 }
