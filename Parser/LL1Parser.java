@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import Exceptions.ExpressionException;
 import Exceptions.InvalidNodeException;
+import Exceptions.InvalidTableOperationException;
 import Models.ParseTree;
 import Models.ProductionRule;
 import Models.Token;
@@ -19,21 +20,43 @@ public class LL1Parser {
         - COLUMNS are TERMINALS represented by Character
         - CELLS are Production Rules which dictate how to pop and push to and from the stack
     */
-    private Map<Token, Map<TokenType, ProductionRule>> parsingTable;
     private Map<Character, Token> nonTerminals;
     private List<ProductionRule> rules;
 
-    public LL1Parser(String inputString) {
+    private Table<String, TokenType, ProductionRule> parsingTable;
 
-        // extract this setup later
-        nonTerminals = Map.of(
-            'S', new Token("<program>", TokenType.NON_TERMINAL),
-            'E', new Token("<expr>", TokenType.NON_TERMINAL),
-            'e', new Token("<expr>*", TokenType.NON_TERMINAL),
-            'P', new Token("<paren-expr>", TokenType.NON_TERMINAL)
-        );
+    public LL1Parser(String inputMessage) {
+        this.parsingTable = new Table<String, TokenType, ProductionRule>();
+        SetupNonTerminalTokens();
+        SetupRules();
+        SetupTable();
+    }
 
-        rules = List.of(
+    private void SetupTable() {
+        this.parsingTable.Add("<program>", TokenType.NUMBER, rules.get(0));
+        this.parsingTable.Add("<program>", TokenType.IDENTIFIER, rules.get(0));
+        this.parsingTable.Add("<program>", TokenType.OPEN_PARENTHESES, rules.get(0));
+        this.parsingTable.Add("<expr>", TokenType.NUMBER, rules.get(1));
+        this.parsingTable.Add("<expr>", TokenType.IDENTIFIER, rules.get(2));
+        this.parsingTable.Add("<expr>", TokenType.OPEN_PARENTHESES, rules.get(3));
+        this.parsingTable.Add("<expr>*", TokenType.NUMBER, rules.get(12));
+        this.parsingTable.Add("<expr>*", TokenType.IDENTIFIER, rules.get(12));
+        this.parsingTable.Add("<expr>*", TokenType.OPEN_PARENTHESES, rules.get(12));
+        this.parsingTable.Add("<expr>*", TokenType.CLOSE_PARENTHESES, rules.get(13));
+        this.parsingTable.Add("<paren-expr>", TokenType.NUMBER, rules.get(11));
+        this.parsingTable.Add("<paren-expr>", TokenType.IDENTIFIER, rules.get(11));
+        this.parsingTable.Add("<paren-expr>", TokenType.OPEN_PARENTHESES, rules.get(11));
+        this.parsingTable.Add("<paren-expr>", TokenType.PLUS, rules.get(4));
+        this.parsingTable.Add("<paren-expr>", TokenType.MULTIPLY, rules.get(5));
+        this.parsingTable.Add("<paren-expr>", TokenType.EQUALS, rules.get(6));
+        this.parsingTable.Add("<paren-expr>", TokenType.MINUS, rules.get(7));
+        this.parsingTable.Add("<paren-expr>", TokenType.CONDITIONAL, rules.get(8));
+        this.parsingTable.Add("<paren-expr>", TokenType.LAMBDA, rules.get(9));
+        this.parsingTable.Add("<paren-expr>", TokenType.LET, rules.get(10));
+    }
+
+    private void SetupRules() {
+        this.rules = List.of(
             new ProductionRule(nonTerminals.get('S'), nonTerminals.get('E')),
             new ProductionRule(nonTerminals.get('E'), new Token(TokenType.NUMBER)),
             new ProductionRule(nonTerminals.get('E'), new Token(TokenType.IDENTIFIER)),
@@ -49,20 +72,14 @@ public class LL1Parser {
             new ProductionRule(nonTerminals.get('e'), nonTerminals.get('E'), nonTerminals.get('e')),
             new ProductionRule(nonTerminals.get('e'), new Token(TokenType.EMPTY))
         );
+    }
 
-        parsingTable = Map.of(
-            nonTerminals.get('S'), Map.of(TokenType.NUMBER, rules.get(0), TokenType.IDENTIFIER, rules.get(0), TokenType.OPEN_PARENTHESES, rules.get(0)),
-            nonTerminals.get('E'), Map.of(TokenType.NUMBER, rules.get(1), TokenType.IDENTIFIER, rules.get(2), TokenType.OPEN_PARENTHESES, rules.get(3)),
-            nonTerminals.get('e'), Map.of(TokenType.NUMBER, rules.get(12), TokenType.IDENTIFIER, rules.get(12), TokenType.OPEN_PARENTHESES, rules.get(12), TokenType.CLOSE_PARENTHESES, rules.get(13)),
-            nonTerminals.get('P'), Map.of(TokenType.NUMBER, rules.get(11), TokenType.IDENTIFIER, rules.get(11), TokenType.OPEN_PARENTHESES, rules.get(11), 
-                TokenType.PLUS, rules.get(4),
-                TokenType.MULTIPLY, rules.get(5),
-                TokenType.EQUALS, rules.get(6),
-                TokenType.MINUS, rules.get(7),
-                TokenType.CONDITIONAL, rules.get(8),
-                TokenType.LAMBDA, rules.get(9),
-                TokenType.LET, rules.get(10)
-            )
+    public void SetupNonTerminalTokens() {
+        this.nonTerminals = Map.of(
+            'S', new Token("<program>", TokenType.NON_TERMINAL),
+            'E', new Token("<expr>", TokenType.NON_TERMINAL),
+            'e', new Token("<expr>*", TokenType.NON_TERMINAL),
+            'P', new Token("<paren-expr>", TokenType.NON_TERMINAL)
         );
     }
 
