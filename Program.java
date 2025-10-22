@@ -14,7 +14,7 @@ import Parser.LL1Parser;
 public class Program {
     public static void main(String[] args) {
         
-        var input = "(× (+ 1 2) 3)";
+        var input = "(+ 1 2)";
         // Scanner scanner = new Scanner(System.in);
         // System.out.print("Enter MiniLisp Expression: ");
         // var input = scanner.nextLine();

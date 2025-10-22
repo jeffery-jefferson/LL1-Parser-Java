@@ -1,19 +1,20 @@
 package Models;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import Exceptions.InvalidNodeException;
+import Exceptions.InvalidNodeOperationException;
 
 public class ParseTree<T> {
     private TreeNode<T> root;
     private TreeNode<T> currentNode;
-    private HashSet<TreeNode<T>> nodes;
+    private List<TreeNode<T>> nodes;
 
     public ParseTree(TreeNode<T> root) {
         this.root = root;
         this.currentNode = this.root;
-        this.nodes = new HashSet<TreeNode<T>>();
+        this.nodes = new ArrayList<TreeNode<T>>();
         this.nodes.add(this.root);
     }
 
@@ -25,9 +26,13 @@ public class ParseTree<T> {
         }
     }
 
-    public void Add(TreeNode<T> node) {
-        this.currentNode.AddChild(node);
-        this.nodes.add(node);
+    public void Add(TreeNode<T> node) throws InvalidNodeOperationException {
+        if (!this.nodes.contains(node)) {
+            this.currentNode.AddChild(node);
+            this.nodes.add(node);
+        } else {
+            throw new InvalidNodeOperationException("Cannot add node as it already exists in the tree.");
+        }
     }
     public void Add(TreeNode<T> fromNode, TreeNode<T> toNode) throws InvalidNodeException {
         if (nodes.contains(fromNode)) {
@@ -51,11 +56,28 @@ public class ParseTree<T> {
 
     @Override
     public String toString() {
-        String result = "";
-        var curr = this.root;
-        var nextChildren = new HashSet<TreeNode<T>>();
-        nextChildren.addAll(curr.GetChildren());
-        result += curr.GetValue() + "\n";
-        return result;
+        StringBuilder sb = new StringBuilder();
+        buildString(this.root, sb, "", true);
+        return sb.toString();
+    }
+
+    private void buildString(TreeNode<T> node, StringBuilder sb, String prefix, boolean isLast) {
+        if (node == null) {
+            return;
+        }
+
+        sb.append(prefix);
+        sb.append(isLast ? "└── " : "├── ");
+        sb.append(node.GetValue()).append("\n");
+
+        var children = node.GetChildren();
+        if (children == null || children.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < children.size(); i++) {
+            boolean lastChild = (i == children.size() - 1);
+            buildString(children.get(i), sb, prefix + (isLast ? "    " : "│   "), lastChild);
+        }
     }
 }

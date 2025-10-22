@@ -1,6 +1,5 @@
 package Parser;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -24,11 +23,7 @@ public class LL1Parser {
     private Map<Character, Token> nonTerminals;
     private List<ProductionRule> rules;
 
-    private Stack<Token> stack;
-
     public LL1Parser(String inputString) {
-
-        this.stack = new Stack<Token>();
 
         // extract this setup later
         nonTerminals = Map.of(
@@ -72,6 +67,7 @@ public class LL1Parser {
     }
 
     public ParseTree<Token> Parse(List<Token> tokens) throws ExpressionException, InvalidNodeException {
+        var stack = new Stack<Token>();
         var startingToken = nonTerminals.get('S');
         var root = new TreeNode<Token>(startingToken);
         var parseTree = new ParseTree<Token>(root);
@@ -89,7 +85,7 @@ public class LL1Parser {
             // if there is no node in the tree of that value then we should throw 
             // since it should have already been pushed to the stack in the last iteration
             if (currentTreeNode == null) {
-                throw new ExpressionException("Stack top has a token (" + top.GetValue() +  ") which was not found in the parse tree.");
+                throw new ExpressionException("Stack top has a token \"" + top.GetValue() +  "\" which was not found in the parse tree.");
             }
             parseTree.SetCurrentNode(currentTreeNode);
 
@@ -100,21 +96,26 @@ public class LL1Parser {
                     currentInputTokenIndex++;
                     stack.pop();
                 } else {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
             } else {
                 // we add to the parse tree here...
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.Type + " " + currentToken.GetValue() + "'");
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
 
                 stack.pop();
+                // add to stack in reverse order
                 for (var token : rule.GetRHS().reversed()) {
                     if (!token.Type.equals(TokenType.EMPTY)) {
                         stack.push(token);
-                        // add to the parse tree's current node
+                    }
+                }
+                // add to parse tree in correct order
+                for (var token : rule.GetRHS()) {
+                    if (!token.Type.equals(TokenType.EMPTY)) {
                         parseTree.Add(new TreeNode<Token>(token));
                     }
                 }

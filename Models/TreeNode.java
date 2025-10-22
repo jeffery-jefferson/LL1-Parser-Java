@@ -1,32 +1,29 @@
 package Models;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class TreeNode<T> {
-    private UUID id;
-    private T value;
-    private HashSet<TreeNode<T>> children;
+    private T val;
+    private List<TreeNode<T>> children;
 
     public TreeNode(T value) {
-        this.value = value;
-        this.children = new HashSet<TreeNode<T>>();
-        this.id = UUID.randomUUID();
-    }
-
-    public UUID GetId() {
-        return this.id;
+        this.val = value;
+        this.children = new ArrayList<TreeNode<T>>();
     }
 
     public T GetValue() {
-        return this.value;
+        return this.val;
     }
 
-    public HashSet<TreeNode<T>> GetChildren() {
+    public List<TreeNode<T>> GetChildren() {
         return this.children;
     }
 
     public void AddChild(TreeNode<T> child) {
-        this.children.add(child);
+        if (!this.children.contains(child)) {
+            this.children.add(child);
+        }
     }
 }
