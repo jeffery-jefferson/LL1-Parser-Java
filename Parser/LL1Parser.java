@@ -1,5 +1,6 @@
 package Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -125,16 +126,17 @@ public class LL1Parser {
                 }
 
                 stack.pop();
+                // make new list of new token objects (while also adding to parse tree)
+                var pushTokens = new ArrayList<Token>();
+                for (var token : rule.GetRHS()) {
+                    var pushToken = new Token(token.GetValue(), token.Type);
+                    pushTokens.add(pushToken);
+                    parseTree.Add(new TreeNode<Token>(pushToken));
+                }
                 // add to stack in reverse order
-                for (var token : rule.GetRHS().reversed()) {
+                for (var token : pushTokens.reversed()) {
                     if (!token.Type.equals(TokenType.EMPTY)) {
                         stack.push(token);
-                    }
-                }
-                // add to parse tree in correct order
-                for (var token : rule.GetRHS()) {
-                    if (!token.Type.equals(TokenType.EMPTY)) {
-                        parseTree.Add(new TreeNode<Token>(token));
                     }
                 }
                 System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
