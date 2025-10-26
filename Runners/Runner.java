@@ -12,11 +12,11 @@ import Models.Token;
 import Parser.LL1Parser;
 
 public class Runner {
-    public static void Run(String input) {
-        Runner.Run(input, false);
+    public static boolean Run(String input) {
+        return Runner.Run(input, true);
     }
-    public static void Run(String input, boolean isVerbose) {
 
+    public static boolean Run(String input, boolean isVerbose) {
         var dfa = new Dfa(input);
         setupDFA(dfa);
 
@@ -25,34 +25,32 @@ public class Runner {
         // another tokenization strategy is to use an FST (Finite-State Transducer)
         // logic is on Lecture 6 slide 13
         // although this seems to enforce whitespaces at places like after operators
-        System.out.println("Tokenizing...");
         List<Token> tokens = null;
         try {
-            tokens = lexer.Tokenize(input);
+            tokens = lexer.Tokenize(input, isVerbose);
         } catch (NumberException ex) {
             System.out.println("Malformed number: " + ex.getMessage());
-            System.exit(999);
+            return false;
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
-            System.exit(888);
+            return false;
         }
-        System.out.println("Finished Tokenizing.");
         System.out.println("Tokens: " + tokens.toString());
 
         // now parse + parse tree
         var parser = new LL1Parser(input);
-        System.out.println("Starting LL1 Parsing.");
         ParseTree<Token> result = null;
         try {
-            result = parser.Parse(tokens);
+            result = parser.Parse(tokens, isVerbose);
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
-            System.exit(888);
+            return false;
         } catch (InvalidNodeException ex) {
             System.out.println("An error occurred during parse tree generation: " + ex.getMessage());
+            return false;
         }
-        System.out.println("Finished LL1 Parsing");
         System.out.println("Parse tree:\n" + result);
+        return true;
     }
 
     static void setupDFA(Dfa dfa) {
