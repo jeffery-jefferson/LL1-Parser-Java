@@ -114,7 +114,7 @@ public class LL1Parser {
                 if (top.Type.equals(currentToken.Type)) {
                     currentInputTokenIndex++;
                     stack.pop();
-                    System.out.println("    Consumed symbol '" + currentToken.GetValue() + "'");
+                    System.out.println("\tConsumed symbol '" + currentToken.GetValue() + "'");
                 } else {
                     throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
@@ -142,6 +142,11 @@ public class LL1Parser {
                 }
                 System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
             }
+        }
+
+        var endSymbol = stack.pop();
+        if (!endSymbol.GetValue().toString().equals("$")) {
+            throw new ExpressionException("The stack was not empty after parsing was finished.");
         }
 
         return parseTree;
