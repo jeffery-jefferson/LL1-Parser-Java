@@ -7,7 +7,7 @@ import java.util.HashMap;
 import Exceptions.ExpressionException;
 import Models.State;
 import Models.TransitionPair;
-
+// mark was here
 public class Dfa implements IAutomata {
 
     public HashSet<State> States;
