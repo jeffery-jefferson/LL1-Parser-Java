@@ -3,6 +3,7 @@ package Runners;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import Models.TestCase;
 import Models.TestGroup;
 
 public class TestCaseRunner {
@@ -16,6 +17,10 @@ public class TestCaseRunner {
             "(xxx)",
             "(+ 1 1)",
         }),
+    };
+
+    private static TestCase[] tests = new TestCase[] {
+        new TestCase("SIMPLE NUMBER", "1", ""),
     };
 
     public static void Run() {
