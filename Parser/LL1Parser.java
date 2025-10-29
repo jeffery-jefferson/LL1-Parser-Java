@@ -108,7 +108,7 @@ public class LL1Parser {
 
             var top = stack.peek();
             // get current tree node based on stack top token (this is value of tree node)
-            var currentTreeNode = parseTree.GetTreeNodeByValue(top);
+            var currentTreeNode = parseTree.getTreeNode(top);
             // if there is no node in the tree of that value then we should throw 
             // since it should have already been pushed to the stack in the last iteration
             if (currentTreeNode == null) {

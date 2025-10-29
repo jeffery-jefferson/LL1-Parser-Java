@@ -88,9 +88,7 @@ public class Token {
                     case '$':
                         result = TokenType.END;
                         break;
-                    default: // before this was non-terminal but this was under the assumption that
-                            // identifiers were more than 1 character.
-                            // now the NON_TERMINAL TokenType must be set manually.
+                    default: // now the NON_TERMINAL TokenType must be set manually.
                         result = TokenType.IDENTIFIER;
                         break;
                 }

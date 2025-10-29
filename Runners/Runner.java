@@ -1,4 +1,11 @@
 package Runners;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.util.List;
 
 import Automata.Dfa;
@@ -12,11 +19,11 @@ import Models.Token;
 import Parser.LL1Parser;
 
 public class Runner {
-    public static boolean Run(String input) {
+    public static String Run(String input) {
         return Runner.Run(input, true);
     }
 
-    public static boolean Run(String input, boolean isVerbose) {
+    public static String Run(String input, boolean isVerbose) {
         var dfa = new Dfa(input);
         setupDFA(dfa);
 
@@ -30,10 +37,10 @@ public class Runner {
             tokens = lexer.Tokenize(input, isVerbose);
         } catch (NumberException ex) {
             System.out.println("Malformed number: " + ex.getMessage());
-            return false;
+            return "";
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
-            return false;
+            return "";
         }
         System.out.println("Tokens: " + tokens.toString());
 
@@ -44,13 +51,23 @@ public class Runner {
             result = parser.Parse(tokens, isVerbose);
         } catch (ExpressionException ex) {
             System.out.println("Invalid expression: " + ex.getMessage());
-            return false;
+            return "";
         } catch (InvalidNodeException ex) {
             System.out.println("An error occurred during parse tree generation: " + ex.getMessage());
-            return false;
+            return "";
         }
-        System.out.println("Parse tree:\n" + result);
-        return true;
+        
+        var mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        String jsonResult = "";
+        try {
+            jsonResult = mapper.writeValueAsString(result);
+        } catch (JsonProcessingException ex) {
+            System.out.println("An error occurred during parse tree JSON conversion: " + ex.getMessage());
+            return "";
+        }
+        return jsonResult;
     }
 
     static void setupDFA(Dfa dfa) {

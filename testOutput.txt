@@ -1,0 +1,276 @@
+TEST RUN: Simple Valid{
+  "root" : {
+    "val" : {
+      "val" : "<program>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : "<expr>",
+        "Type" : "NON_TERMINAL"
+      },
+      "children" : [ {
+        "val" : {
+          "val" : "(",
+          "Type" : "OPEN_PARENTHESES"
+        },
+        "children" : [ ]
+      }, {
+        "val" : {
+          "val" : "<paren-expr>",
+          "Type" : "NON_TERMINAL"
+        },
+        "children" : [ {
+          "val" : {
+            "val" : null,
+            "Type" : "PLUS"
+          },
+          "children" : [ ]
+        }, {
+          "val" : {
+            "val" : "<expr>",
+            "Type" : "NON_TERMINAL"
+          },
+          "children" : [ {
+            "val" : {
+              "val" : null,
+              "Type" : "NUMBER"
+            },
+            "children" : [ ]
+          } ]
+        }, {
+          "val" : {
+            "val" : "<expr>",
+            "Type" : "NON_TERMINAL"
+          },
+          "children" : [ {
+            "val" : {
+              "val" : null,
+              "Type" : "NUMBER"
+            },
+            "children" : [ ]
+          } ]
+        } ]
+      }, {
+        "val" : {
+          "val" : ")",
+          "Type" : "CLOSE_PARENTHESES"
+        },
+        "children" : [ ]
+      } ]
+    } ]
+  },
+  "currentNode" : {
+    "val" : {
+      "val" : ")",
+      "Type" : "CLOSE_PARENTHESES"
+    },
+    "children" : [ ]
+  },
+  "nodes" : [ {
+    "val" : {
+      "val" : "<program>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : "<expr>",
+        "Type" : "NON_TERMINAL"
+      },
+      "children" : [ {
+        "val" : {
+          "val" : "(",
+          "Type" : "OPEN_PARENTHESES"
+        },
+        "children" : [ ]
+      }, {
+        "val" : {
+          "val" : "<paren-expr>",
+          "Type" : "NON_TERMINAL"
+        },
+        "children" : [ {
+          "val" : {
+            "val" : null,
+            "Type" : "PLUS"
+          },
+          "children" : [ ]
+        }, {
+          "val" : {
+            "val" : "<expr>",
+            "Type" : "NON_TERMINAL"
+          },
+          "children" : [ {
+            "val" : {
+              "val" : null,
+              "Type" : "NUMBER"
+            },
+            "children" : [ ]
+          } ]
+        }, {
+          "val" : {
+            "val" : "<expr>",
+            "Type" : "NON_TERMINAL"
+          },
+          "children" : [ {
+            "val" : {
+              "val" : null,
+              "Type" : "NUMBER"
+            },
+            "children" : [ ]
+          } ]
+        } ]
+      }, {
+        "val" : {
+          "val" : ")",
+          "Type" : "CLOSE_PARENTHESES"
+        },
+        "children" : [ ]
+      } ]
+    } ]
+  }, {
+    "val" : {
+      "val" : "<expr>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : "(",
+        "Type" : "OPEN_PARENTHESES"
+      },
+      "children" : [ ]
+    }, {
+      "val" : {
+        "val" : "<paren-expr>",
+        "Type" : "NON_TERMINAL"
+      },
+      "children" : [ {
+        "val" : {
+          "val" : null,
+          "Type" : "PLUS"
+        },
+        "children" : [ ]
+      }, {
+        "val" : {
+          "val" : "<expr>",
+          "Type" : "NON_TERMINAL"
+        },
+        "children" : [ {
+          "val" : {
+            "val" : null,
+            "Type" : "NUMBER"
+          },
+          "children" : [ ]
+        } ]
+      }, {
+        "val" : {
+          "val" : "<expr>",
+          "Type" : "NON_TERMINAL"
+        },
+        "children" : [ {
+          "val" : {
+            "val" : null,
+            "Type" : "NUMBER"
+          },
+          "children" : [ ]
+        } ]
+      } ]
+    }, {
+      "val" : {
+        "val" : ")",
+        "Type" : "CLOSE_PARENTHESES"
+      },
+      "children" : [ ]
+    } ]
+  }, {
+    "val" : {
+      "val" : "(",
+      "Type" : "OPEN_PARENTHESES"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : "<paren-expr>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : null,
+        "Type" : "PLUS"
+      },
+      "children" : [ ]
+    }, {
+      "val" : {
+        "val" : "<expr>",
+        "Type" : "NON_TERMINAL"
+      },
+      "children" : [ {
+        "val" : {
+          "val" : null,
+          "Type" : "NUMBER"
+        },
+        "children" : [ ]
+      } ]
+    }, {
+      "val" : {
+        "val" : "<expr>",
+        "Type" : "NON_TERMINAL"
+      },
+      "children" : [ {
+        "val" : {
+          "val" : null,
+          "Type" : "NUMBER"
+        },
+        "children" : [ ]
+      } ]
+    } ]
+  }, {
+    "val" : {
+      "val" : ")",
+      "Type" : "CLOSE_PARENTHESES"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : null,
+      "Type" : "PLUS"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : "<expr>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : null,
+        "Type" : "NUMBER"
+      },
+      "children" : [ ]
+    } ]
+  }, {
+    "val" : {
+      "val" : "<expr>",
+      "Type" : "NON_TERMINAL"
+    },
+    "children" : [ {
+      "val" : {
+        "val" : null,
+        "Type" : "NUMBER"
+      },
+      "children" : [ ]
+    } ]
+  }, {
+    "val" : {
+      "val" : null,
+      "Type" : "NUMBER"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : null,
+      "Type" : "NUMBER"
+    },
+    "children" : [ ]
+  } ]
+}
+
