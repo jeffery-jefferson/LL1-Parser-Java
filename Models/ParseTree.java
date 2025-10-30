@@ -51,13 +51,25 @@ public class ParseTree<T> {
     public TreeNode<T> getTreeNode(T value) {
         TreeNode<T> result = null;
         for (var node : this.nodes) {
-            if (node.GetValue() == value) {
+            if (node.getVal() == value) {
                 result = node;
                 break;
             }
         }
         return result;
     }
+
+    public List<TreeNode<T>> getTerminalNodes() {
+        List<TreeNode<T>> terminals = new ArrayList<>();
+
+        for (TreeNode<T> node : nodes) {
+            if (node.getChildren() == null || node.getChildren().isEmpty()) {
+                terminals.add(node);
+            }
+        }
+        return terminals;
+    }
+
 
     @Override
     public String toString() {
@@ -73,9 +85,9 @@ public class ParseTree<T> {
 
         sb.append(prefix);
         sb.append(isLast ? "└── " : "├── ");
-        sb.append(node.GetValue()).append("\n");
+        sb.append(node.getVal()).append("\n");
 
-        var children = node.GetChildren();
+        var children = node.getChildren();
         if (children == null || children.isEmpty()) {
             return;
         }

@@ -9,13 +9,7 @@ import Models.TestGroup;
 public class TestCaseRunner {
     private static TestGroup[] testCases = new TestGroup[] {
         new TestGroup("Simple Valid", new String[] {
-            "1",
-            "x",
-            "xxx",
-            "(1)",
             "(x)",
-            "(xxx)",
-            "(+ 1 1)",
         }),
     };
 

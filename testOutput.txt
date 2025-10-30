@@ -22,31 +22,25 @@ TEST RUN: Simple Valid{
         },
         "children" : [ {
           "val" : {
-            "val" : null,
-            "Type" : "PLUS"
-          },
-          "children" : [ ]
-        }, {
-          "val" : {
             "val" : "<expr>",
             "Type" : "NON_TERMINAL"
           },
           "children" : [ {
             "val" : {
-              "val" : null,
-              "Type" : "NUMBER"
+              "val" : "x",
+              "Type" : "IDENTIFIER"
             },
             "children" : [ ]
           } ]
         }, {
           "val" : {
-            "val" : "<expr>",
+            "val" : "<expr>*",
             "Type" : "NON_TERMINAL"
           },
           "children" : [ {
             "val" : {
               "val" : null,
-              "Type" : "NUMBER"
+              "Type" : "EMPTY"
             },
             "children" : [ ]
           } ]
@@ -90,31 +84,25 @@ TEST RUN: Simple Valid{
         },
         "children" : [ {
           "val" : {
-            "val" : null,
-            "Type" : "PLUS"
-          },
-          "children" : [ ]
-        }, {
-          "val" : {
             "val" : "<expr>",
             "Type" : "NON_TERMINAL"
           },
           "children" : [ {
             "val" : {
-              "val" : null,
-              "Type" : "NUMBER"
+              "val" : "x",
+              "Type" : "IDENTIFIER"
             },
             "children" : [ ]
           } ]
         }, {
           "val" : {
-            "val" : "<expr>",
+            "val" : "<expr>*",
             "Type" : "NON_TERMINAL"
           },
           "children" : [ {
             "val" : {
               "val" : null,
-              "Type" : "NUMBER"
+              "Type" : "EMPTY"
             },
             "children" : [ ]
           } ]
@@ -145,31 +133,25 @@ TEST RUN: Simple Valid{
       },
       "children" : [ {
         "val" : {
-          "val" : null,
-          "Type" : "PLUS"
-        },
-        "children" : [ ]
-      }, {
-        "val" : {
           "val" : "<expr>",
           "Type" : "NON_TERMINAL"
         },
         "children" : [ {
           "val" : {
-            "val" : null,
-            "Type" : "NUMBER"
+            "val" : "x",
+            "Type" : "IDENTIFIER"
           },
           "children" : [ ]
         } ]
       }, {
         "val" : {
-          "val" : "<expr>",
+          "val" : "<expr>*",
           "Type" : "NON_TERMINAL"
         },
         "children" : [ {
           "val" : {
             "val" : null,
-            "Type" : "NUMBER"
+            "Type" : "EMPTY"
           },
           "children" : [ ]
         } ]
@@ -194,31 +176,25 @@ TEST RUN: Simple Valid{
     },
     "children" : [ {
       "val" : {
-        "val" : null,
-        "Type" : "PLUS"
-      },
-      "children" : [ ]
-    }, {
-      "val" : {
         "val" : "<expr>",
         "Type" : "NON_TERMINAL"
       },
       "children" : [ {
         "val" : {
-          "val" : null,
-          "Type" : "NUMBER"
+          "val" : "x",
+          "Type" : "IDENTIFIER"
         },
         "children" : [ ]
       } ]
     }, {
       "val" : {
-        "val" : "<expr>",
+        "val" : "<expr>*",
         "Type" : "NON_TERMINAL"
       },
       "children" : [ {
         "val" : {
           "val" : null,
-          "Type" : "NUMBER"
+          "Type" : "EMPTY"
         },
         "children" : [ ]
       } ]
@@ -231,44 +207,63 @@ TEST RUN: Simple Valid{
     "children" : [ ]
   }, {
     "val" : {
-      "val" : null,
-      "Type" : "PLUS"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
       "val" : "<expr>",
       "Type" : "NON_TERMINAL"
     },
     "children" : [ {
       "val" : {
-        "val" : null,
-        "Type" : "NUMBER"
+        "val" : "x",
+        "Type" : "IDENTIFIER"
       },
       "children" : [ ]
     } ]
   }, {
     "val" : {
-      "val" : "<expr>",
+      "val" : "<expr>*",
       "Type" : "NON_TERMINAL"
     },
     "children" : [ {
       "val" : {
         "val" : null,
-        "Type" : "NUMBER"
+        "Type" : "EMPTY"
       },
       "children" : [ ]
     } ]
   }, {
     "val" : {
-      "val" : null,
-      "Type" : "NUMBER"
+      "val" : "x",
+      "Type" : "IDENTIFIER"
     },
     "children" : [ ]
   }, {
     "val" : {
       "val" : null,
-      "Type" : "NUMBER"
+      "Type" : "EMPTY"
+    },
+    "children" : [ ]
+  } ],
+  "terminalNodes" : [ {
+    "val" : {
+      "val" : "(",
+      "Type" : "OPEN_PARENTHESES"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : ")",
+      "Type" : "CLOSE_PARENTHESES"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : "x",
+      "Type" : "IDENTIFIER"
+    },
+    "children" : [ ]
+  }, {
+    "val" : {
+      "val" : null,
+      "Type" : "EMPTY"
     },
     "children" : [ ]
   } ]

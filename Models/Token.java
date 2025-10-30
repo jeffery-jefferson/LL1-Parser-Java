@@ -23,6 +23,7 @@ public class Token {
         END
     }
 
+    public Token() {}
     public Token(Object tokenValue) {
         this.val = tokenValue;
         this.Type = GetTokenType(this.val);
@@ -39,7 +40,7 @@ public class Token {
 
     }
 
-    public Object GetValue() {
+    public Object getVal() {
         return this.val;
     }
 
