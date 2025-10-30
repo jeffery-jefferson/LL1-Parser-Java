@@ -84,6 +84,13 @@ public class LL1Parser {
     }
 
     public ParseTree<Token> Parse(List<Token> tokens) throws ExpressionException, InvalidNodeException {
+        return Parse(tokens, false);
+    }
+
+    public ParseTree<Token> Parse(List<Token> tokens, boolean isVerbose) throws ExpressionException, InvalidNodeException {
+        if (isVerbose) {
+            System.out.println("Starting LL1 Parsing...");
+        }
         var stack = new Stack<Token>();
         var startingToken = nonTerminals.get('S');
         var root = new TreeNode<Token>(startingToken);
@@ -95,11 +102,13 @@ public class LL1Parser {
         var currentInputTokenIndex = 0;
 
         while (currentInputTokenIndex < tokens.size() && stack.size() != 0) {
-            System.out.println("Current LL1 Stack: " + stack.toString());
+            if (isVerbose) {
+                System.out.println("Current LL1 Stack: " + stack.toString());
+            }
 
             var top = stack.peek();
             // get current tree node based on stack top token (this is value of tree node)
-            var currentTreeNode = parseTree.GetTreeNodeByValue(top);
+            var currentTreeNode = parseTree.getTreeNode(top);
             // if there is no node in the tree of that value then we should throw 
             // since it should have already been pushed to the stack in the last iteration
             if (currentTreeNode == null) {
@@ -114,7 +123,9 @@ public class LL1Parser {
                 if (top.Type.equals(currentToken.Type)) {
                     currentInputTokenIndex++;
                     stack.pop();
-                    System.out.println("    Consumed symbol '" + currentToken.GetValue() + "'");
+                    if (isVerbose) {
+                        System.out.println("\tConsumed symbol '" + currentToken.GetValue() + "'");
+                    }
                 } else {
                     throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
                 }
@@ -140,8 +151,19 @@ public class LL1Parser {
                         stack.push(token);
                     }
                 }
-                System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
+                if (isVerbose) {
+                    System.out.println("\tUsed rule No." + (rules.indexOf(rule) + 1) + " : " + rule.toString());
+                }
             }
+        }
+
+        var endSymbol = stack.pop();
+        if (!endSymbol.GetValue().toString().equals("$")) {
+            throw new ExpressionException("The stack was not empty after parsing was finished.");
+        }
+
+        if (isVerbose) {
+            System.out.println("Finished LL1 Parsing.");
         }
 
         return parseTree;

@@ -18,6 +18,11 @@ public class ParseTree<T> {
         this.nodes.add(this.root);
     }
 
+    public ParseTree() {} // for deserialization
+    public TreeNode<T> getRoot() { return root; }
+    public TreeNode<T> getCurrentNode() { return currentNode; }
+    public List<TreeNode<T>> getNodes() { return nodes; }
+
     public void SetCurrentNode(TreeNode<T> node) throws InvalidNodeException  {
         if (nodes.contains(node)) {
             this.currentNode = node;
@@ -43,7 +48,7 @@ public class ParseTree<T> {
         }
     }
 
-    public TreeNode<T> GetTreeNodeByValue(T value) {
+    public TreeNode<T> getTreeNode(T value) {
         TreeNode<T> result = null;
         for (var node : this.nodes) {
             if (node.GetValue() == value) {

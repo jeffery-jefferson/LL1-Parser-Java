@@ -16,9 +16,16 @@ public class Lexer implements ILexer {
         this.dfa = dfa;
     }
 
-    @Override
+	@Override
     public List<Token> Tokenize(String input) throws NumberException, ExpressionException {
-		System.out.println("Starting state: " + dfa.StartState);
+		return Tokenize(input, false);
+	}
+
+    public List<Token> Tokenize(String input, boolean isVerbose) throws NumberException, ExpressionException {
+		if (isVerbose) {
+			System.out.println("Tokenizing...");
+			System.out.println("Starting state: " + dfa.StartState);
+		}
 
 		// Tokenising logic
 		var result = new ArrayList<Token>();
@@ -28,7 +35,9 @@ public class Lexer implements ILexer {
 		while (!dfa.IsFinished()) {
 			try {
 				var processedChar = dfa.Next().charValue();
-				System.out.println("Processed: '" + processedChar + "', now on state: " + dfa.CurrentState);
+				if (isVerbose) {
+					System.out.println("Processed: '" + processedChar + "', now on state: " + dfa.CurrentState);
+				}
 				// Collect numbers in the buffer
 				if (IsNumber(processedChar)) {
 					if (isProcessingIdentifier) {
@@ -70,6 +79,9 @@ public class Lexer implements ILexer {
 					throw new NumberException("Line 50. Inner Exception: " + ex.getMessage());
 				}
 				throw ex;
+			}
+			if (isVerbose) {
+				System.out.println("Finished tokenizing.");
 			}
 		}
 
