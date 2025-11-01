@@ -1,8 +1,11 @@
 package Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Token {
 
     private Object val;
+    @JsonIgnore
     public TokenType Type;
 
     public enum TokenType {

@@ -3,6 +3,8 @@ package Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import Exceptions.InvalidNodeException;
 import Exceptions.InvalidNodeOperationException;
 
@@ -20,7 +22,9 @@ public class ParseTree<T> {
 
     public ParseTree() {} // for deserialization
     public TreeNode<T> getRoot() { return root; }
+    @JsonIgnore
     public TreeNode<T> getCurrentNode() { return currentNode; }
+    @JsonIgnore
     public List<TreeNode<T>> getNodes() { return nodes; }
 
     public void SetCurrentNode(TreeNode<T> node) throws InvalidNodeException  {
@@ -59,6 +63,7 @@ public class ParseTree<T> {
         return result;
     }
 
+    @JsonIgnore
     public List<TreeNode<T>> getTerminalNodes() {
         List<TreeNode<T>> terminals = new ArrayList<>();
 

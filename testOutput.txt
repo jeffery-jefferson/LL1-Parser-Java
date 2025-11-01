@@ -1,271 +1,49 @@
 TEST RUN: Simple Valid{
   "root" : {
     "val" : {
-      "val" : "<program>",
-      "Type" : "NON_TERMINAL"
+      "val" : "<program>"
     },
     "children" : [ {
       "val" : {
-        "val" : "<expr>",
-        "Type" : "NON_TERMINAL"
+        "val" : "<expr>"
       },
       "children" : [ {
         "val" : {
-          "val" : "(",
-          "Type" : "OPEN_PARENTHESES"
+          "val" : "("
         },
         "children" : [ ]
       }, {
         "val" : {
-          "val" : "<paren-expr>",
-          "Type" : "NON_TERMINAL"
+          "val" : "<paren-expr>"
         },
         "children" : [ {
           "val" : {
-            "val" : "<expr>",
-            "Type" : "NON_TERMINAL"
+            "val" : "<expr>"
           },
           "children" : [ {
             "val" : {
-              "val" : "x",
-              "Type" : "IDENTIFIER"
+              "val" : "x"
             },
             "children" : [ ]
           } ]
         }, {
           "val" : {
-            "val" : "<expr>*",
-            "Type" : "NON_TERMINAL"
+            "val" : "<expr>*"
           },
           "children" : [ {
             "val" : {
-              "val" : null,
-              "Type" : "EMPTY"
+              "val" : null
             },
             "children" : [ ]
           } ]
         } ]
       }, {
         "val" : {
-          "val" : ")",
-          "Type" : "CLOSE_PARENTHESES"
+          "val" : ")"
         },
         "children" : [ ]
       } ]
     } ]
-  },
-  "currentNode" : {
-    "val" : {
-      "val" : ")",
-      "Type" : "CLOSE_PARENTHESES"
-    },
-    "children" : [ ]
-  },
-  "nodes" : [ {
-    "val" : {
-      "val" : "<program>",
-      "Type" : "NON_TERMINAL"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : "<expr>",
-        "Type" : "NON_TERMINAL"
-      },
-      "children" : [ {
-        "val" : {
-          "val" : "(",
-          "Type" : "OPEN_PARENTHESES"
-        },
-        "children" : [ ]
-      }, {
-        "val" : {
-          "val" : "<paren-expr>",
-          "Type" : "NON_TERMINAL"
-        },
-        "children" : [ {
-          "val" : {
-            "val" : "<expr>",
-            "Type" : "NON_TERMINAL"
-          },
-          "children" : [ {
-            "val" : {
-              "val" : "x",
-              "Type" : "IDENTIFIER"
-            },
-            "children" : [ ]
-          } ]
-        }, {
-          "val" : {
-            "val" : "<expr>*",
-            "Type" : "NON_TERMINAL"
-          },
-          "children" : [ {
-            "val" : {
-              "val" : null,
-              "Type" : "EMPTY"
-            },
-            "children" : [ ]
-          } ]
-        } ]
-      }, {
-        "val" : {
-          "val" : ")",
-          "Type" : "CLOSE_PARENTHESES"
-        },
-        "children" : [ ]
-      } ]
-    } ]
-  }, {
-    "val" : {
-      "val" : "<expr>",
-      "Type" : "NON_TERMINAL"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : "(",
-        "Type" : "OPEN_PARENTHESES"
-      },
-      "children" : [ ]
-    }, {
-      "val" : {
-        "val" : "<paren-expr>",
-        "Type" : "NON_TERMINAL"
-      },
-      "children" : [ {
-        "val" : {
-          "val" : "<expr>",
-          "Type" : "NON_TERMINAL"
-        },
-        "children" : [ {
-          "val" : {
-            "val" : "x",
-            "Type" : "IDENTIFIER"
-          },
-          "children" : [ ]
-        } ]
-      }, {
-        "val" : {
-          "val" : "<expr>*",
-          "Type" : "NON_TERMINAL"
-        },
-        "children" : [ {
-          "val" : {
-            "val" : null,
-            "Type" : "EMPTY"
-          },
-          "children" : [ ]
-        } ]
-      } ]
-    }, {
-      "val" : {
-        "val" : ")",
-        "Type" : "CLOSE_PARENTHESES"
-      },
-      "children" : [ ]
-    } ]
-  }, {
-    "val" : {
-      "val" : "(",
-      "Type" : "OPEN_PARENTHESES"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : "<paren-expr>",
-      "Type" : "NON_TERMINAL"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : "<expr>",
-        "Type" : "NON_TERMINAL"
-      },
-      "children" : [ {
-        "val" : {
-          "val" : "x",
-          "Type" : "IDENTIFIER"
-        },
-        "children" : [ ]
-      } ]
-    }, {
-      "val" : {
-        "val" : "<expr>*",
-        "Type" : "NON_TERMINAL"
-      },
-      "children" : [ {
-        "val" : {
-          "val" : null,
-          "Type" : "EMPTY"
-        },
-        "children" : [ ]
-      } ]
-    } ]
-  }, {
-    "val" : {
-      "val" : ")",
-      "Type" : "CLOSE_PARENTHESES"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : "<expr>",
-      "Type" : "NON_TERMINAL"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : "x",
-        "Type" : "IDENTIFIER"
-      },
-      "children" : [ ]
-    } ]
-  }, {
-    "val" : {
-      "val" : "<expr>*",
-      "Type" : "NON_TERMINAL"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : null,
-        "Type" : "EMPTY"
-      },
-      "children" : [ ]
-    } ]
-  }, {
-    "val" : {
-      "val" : "x",
-      "Type" : "IDENTIFIER"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : null,
-      "Type" : "EMPTY"
-    },
-    "children" : [ ]
-  } ],
-  "terminalNodes" : [ {
-    "val" : {
-      "val" : "(",
-      "Type" : "OPEN_PARENTHESES"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : ")",
-      "Type" : "CLOSE_PARENTHESES"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : "x",
-      "Type" : "IDENTIFIER"
-    },
-    "children" : [ ]
-  }, {
-    "val" : {
-      "val" : null,
-      "Type" : "EMPTY"
-    },
-    "children" : [ ]
-  } ]
+  }
 }
 
