@@ -20,22 +20,23 @@ public class TestCaseRunner {
     };
 
     public static void Run() {
-        var fileName = "testOutput.txt";
+        var fileName = "testOutput.json";
         var mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        var testResults = new ArrayList<TestCase.TestCaseResult>();
+        for (var test : tests) {
+            var resultTree = Runner.Run(test.getInput().toString(), false);
+            var result = simplify(resultTree.getRoot()).toString().trim();
+            var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+            testResults.add(testResult);
+            System.out.println(testResult + "\n");
+        }
 
         try (var writer = new FileWriter(fileName)) {
-            for (var test : tests) {
-                var resultTree = Runner.Run(test.getInput().toString(), false);
-                var result = simplify(resultTree.getRoot()).toString().trim();
-                var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
-                System.out.println(testResult + "\n");
-
-                var testJson = mapper.writeValueAsString(testResult);
-                writer.write(testJson + "\n");
-            }
+            var results = mapper.writeValueAsString(testResults);
+            writer.write(results);
         } catch (IOException ex) {
-            System.out.println("Could not JSONify test result: " + ex.getMessage() + "\n" + ex.getStackTrace());
+            System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
     }
 

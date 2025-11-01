@@ -1,12 +1,11 @@
-{
+[ {
   "name" : "SIMPLE NUMBER",
   "output" : "[1]",
   "expectedOutput" : "[1]",
-  "result" : "PASSED"
-}
-{
+  "result" : "PASS"
+}, {
   "name" : "SIMPLE IDENTIFIER",
   "output" : "[x]",
   "expectedOutput" : "[x]",
-  "result" : "PASSED"
-}
+  "result" : "PASS"
+} ]
