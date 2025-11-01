@@ -1,54 +1,12 @@
-TEST RUN: Simple Valid{
-  "root" : {
-    "val" : {
-      "val" : "<program>"
-    },
-    "children" : [ {
-      "val" : {
-        "val" : "<expr>"
-      },
-      "children" : [ {
-        "val" : {
-          "val" : "("
-        },
-        "children" : [ ]
-      }, {
-        "val" : {
-          "val" : "<paren-expr>"
-        },
-        "children" : [ {
-          "val" : {
-            "val" : "+"
-          },
-          "children" : [ ]
-        }, {
-          "val" : {
-            "val" : "<expr>"
-          },
-          "children" : [ {
-            "val" : {
-              "val" : 1
-            },
-            "children" : [ ]
-          } ]
-        }, {
-          "val" : {
-            "val" : "<expr>"
-          },
-          "children" : [ {
-            "val" : {
-              "val" : 1
-            },
-            "children" : [ ]
-          } ]
-        } ]
-      }, {
-        "val" : {
-          "val" : ")"
-        },
-        "children" : [ ]
-      } ]
-    } ]
-  }
+{
+  "name" : "SIMPLE NUMBER",
+  "output" : "[1]",
+  "expectedOutput" : "[1]",
+  "result" : "PASSED"
 }
-
+{
+  "name" : "SIMPLE IDENTIFIER",
+  "output" : "[x]",
+  "expectedOutput" : "[x]",
+  "result" : "PASSED"
+}

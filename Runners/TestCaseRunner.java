@@ -10,54 +10,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import Models.TestCase;
-import Models.TestGroup;
-import Models.Token;
+import Models.*;
 import Models.Token.TokenType;
-import Models.TreeNode;
 
 public class TestCaseRunner {
-    private static TestGroup[] testCases = new TestGroup[] {
-        new TestGroup("Simple Valid", new String[] {
-            "(x)",
-            "(+ 1 1)"
-        }),
-    };
-
     private static TestCase[] tests = new TestCase[] {
         new TestCase("SIMPLE NUMBER", "1", "[1]"),
+        new TestCase("SIMPLE IDENTIFIER", "x", "[x]"),
     };
 
     public static void Run() {
         var fileName = "testOutput.txt";
-        for (var testCase : testCases) {
-            for (var testInput : testCase.GetInputs()) {
-                System.out.println("TEST RUN: " + testCase.GetName());
-                var result = Runner.Run(testInput, false);
-                var mapper = new ObjectMapper();
-                mapper.enable(SerializationFeature.INDENT_OUTPUT);
-                String jsonResult = "";
-                try {
-                    jsonResult = mapper.writeValueAsString(result);
-                } catch (JsonProcessingException ex) {
-                    System.out.println("An error occurred during parse tree JSON conversion: " + ex.getMessage());
-                    return;
-                }
-                System.out.println(simplify(result.getRoot()));
-                System.out.println(jsonResult != "" ? "PASSED" : "FAILED");
-                System.out.println("\n");
+        var mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-                try (FileWriter writer = new FileWriter(fileName, false)) {
-                    writer.write("TEST RUN: " + testCase.GetName());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                try (FileWriter writer = new FileWriter(fileName, true)) { 
-                    writer.write(jsonResult + "\n\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        try (var writer = new FileWriter(fileName)) {
+            for (var test : tests) {
+                var resultTree = Runner.Run(test.getInput().toString(), false);
+                var result = simplify(resultTree.getRoot()).toString().trim();
+                var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+                System.out.println(testResult + "\n");
+
+                var testJson = mapper.writeValueAsString(testResult);
+                writer.write(testJson + "\n");
             }
+        } catch (IOException ex) {
+            System.out.println("Could not JSONify test result: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
     }
 
@@ -76,15 +54,13 @@ public class TestCaseRunner {
         }
         // non terminals always have children
         var mergedChildren = new ArrayList<>();
-        if (node.getVal().Type == TokenType.NON_TERMINAL) {
-            for (var child : node.getChildren()) {
-                var simplifiedChildren = simplify(child);
-                if (!simplifiedChildren.isEmpty()) {
-                    if (simplifiedChildren.size() == 1) {
-                        mergedChildren.addAll(simplifiedChildren);
-                    } else {
-                        mergedChildren.add(simplifiedChildren);
-                    }
+        for (var child : node.getChildren()) {
+            var simplifiedChildren = simplify(child);
+            if (!simplifiedChildren.isEmpty()) {
+                if (simplifiedChildren.size() == 1) {
+                    mergedChildren.addAll(simplifiedChildren);
+                } else {
+                    mergedChildren.add(simplifiedChildren);
                 }
             }
         }
