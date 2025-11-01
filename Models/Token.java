@@ -1,8 +1,11 @@
 package Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Token {
 
     private Object val;
+    @JsonIgnore
     public TokenType Type;
 
     public enum TokenType {
@@ -23,6 +26,7 @@ public class Token {
         END
     }
 
+    public Token() {}
     public Token(Object tokenValue) {
         this.val = tokenValue;
         this.Type = GetTokenType(this.val);
@@ -39,7 +43,7 @@ public class Token {
 
     }
 
-    public Object GetValue() {
+    public Object getVal() {
         return this.val;
     }
 

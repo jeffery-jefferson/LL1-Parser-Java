@@ -112,40 +112,43 @@ public class LL1Parser {
             // if there is no node in the tree of that value then we should throw 
             // since it should have already been pushed to the stack in the last iteration
             if (currentTreeNode == null) {
-                throw new ExpressionException("Stack top has a token \"" + top.GetValue() +  "\" which was not found in the parse tree.");
+                throw new ExpressionException("Stack top has a token \"" + top.getVal() +  "\" which was not found in the parse tree.");
             }
             parseTree.SetCurrentNode(currentTreeNode);
 
             var currentToken = tokens.get(currentInputTokenIndex);
-            var row = parsingTable.GetRow(top.GetValue() != null ? top.GetValue().toString() : top.Type.toString());
+            var row = parsingTable.GetRow(top.getVal() != null ? top.getVal().toString() : top.Type.toString());
 
             if (row == null || row.isEmpty()) {
                 if (top.Type.equals(currentToken.Type)) {
+                    // janky fix for parse tree but we should check the first exposed child node with the same type and assign the value here
+                    var treeNode = getFirstExposedTreeNodeWithoutTokenValueOfType(parseTree, top.Type);
+                    if (treeNode != null) {
+                        treeNode.SetValue(currentToken);
+                    }
                     currentInputTokenIndex++;
                     stack.pop();
                     if (isVerbose) {
-                        System.out.println("\tConsumed symbol '" + currentToken.GetValue() + "'");
+                        System.out.println("\tConsumed symbol '" + currentToken.getVal() + "'");
                     }
                 } else {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' " + currentToken.Type);
                 }
             } else {
                 // we add to the parse tree here...
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.GetValue() + "' " + currentToken.Type);
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' " + currentToken.Type);
                 }
 
                 stack.pop();
-                // make new list of new token objects (while also adding to parse tree)
                 var pushTokens = new ArrayList<Token>();
                 for (var token : rule.GetRHS()) {
-                    var pushToken = new Token(token.GetValue(), token.Type);
+                    var pushToken = new Token(token.getVal(), token.Type);
                     pushTokens.add(pushToken);
                     parseTree.Add(new TreeNode<Token>(pushToken));
                 }
-                // add to stack in reverse order
                 for (var token : pushTokens.reversed()) {
                     if (!token.Type.equals(TokenType.EMPTY)) {
                         stack.push(token);
@@ -158,7 +161,7 @@ public class LL1Parser {
         }
 
         var endSymbol = stack.pop();
-        if (!endSymbol.GetValue().toString().equals("$")) {
+        if (!endSymbol.getVal().toString().equals("$")) {
             throw new ExpressionException("The stack was not empty after parsing was finished.");
         }
 
@@ -167,5 +170,15 @@ public class LL1Parser {
         }
 
         return parseTree;
+    }
+
+    private TreeNode<Token> getFirstExposedTreeNodeWithoutTokenValueOfType(ParseTree<Token> tree, TokenType type) {
+        var exposedNodes = tree.getTerminalNodes();
+        for (var node : exposedNodes) {
+            if (node.getVal().Type == type && node.getVal().getVal() == null) {
+                return node;
+            }
+        }
+        return null;
     }
 }

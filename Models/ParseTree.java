@@ -3,6 +3,8 @@ package Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import Exceptions.InvalidNodeException;
 import Exceptions.InvalidNodeOperationException;
 
@@ -20,7 +22,9 @@ public class ParseTree<T> {
 
     public ParseTree() {} // for deserialization
     public TreeNode<T> getRoot() { return root; }
+    @JsonIgnore
     public TreeNode<T> getCurrentNode() { return currentNode; }
+    @JsonIgnore
     public List<TreeNode<T>> getNodes() { return nodes; }
 
     public void SetCurrentNode(TreeNode<T> node) throws InvalidNodeException  {
@@ -51,12 +55,24 @@ public class ParseTree<T> {
     public TreeNode<T> getTreeNode(T value) {
         TreeNode<T> result = null;
         for (var node : this.nodes) {
-            if (node.GetValue() == value) {
+            if (node.getVal() == value) {
                 result = node;
                 break;
             }
         }
         return result;
+    }
+
+    @JsonIgnore
+    public List<TreeNode<T>> getTerminalNodes() {
+        List<TreeNode<T>> terminals = new ArrayList<>();
+
+        for (TreeNode<T> node : nodes) {
+            if (node.getChildren() == null || node.getChildren().isEmpty()) {
+                terminals.add(node);
+            }
+        }
+        return terminals;
     }
 
     @Override
@@ -73,9 +89,9 @@ public class ParseTree<T> {
 
         sb.append(prefix);
         sb.append(isLast ? "└── " : "├── ");
-        sb.append(node.GetValue()).append("\n");
+        sb.append(node.getVal()).append("\n");
 
-        var children = node.GetChildren();
+        var children = node.getChildren();
         if (children == null || children.isEmpty()) {
             return;
         }
