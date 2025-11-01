@@ -18,21 +18,26 @@ TEST RUN: Simple Valid{
         },
         "children" : [ {
           "val" : {
+            "val" : "+"
+          },
+          "children" : [ ]
+        }, {
+          "val" : {
             "val" : "<expr>"
           },
           "children" : [ {
             "val" : {
-              "val" : "x"
+              "val" : 1
             },
             "children" : [ ]
           } ]
         }, {
           "val" : {
-            "val" : "<expr>*"
+            "val" : "<expr>"
           },
           "children" : [ {
             "val" : {
-              "val" : null
+              "val" : 1
             },
             "children" : [ ]
           } ]

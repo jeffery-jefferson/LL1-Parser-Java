@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Automata.Dfa;
@@ -16,14 +17,16 @@ import LexicalAnalyser.Lexer;
 import Models.ParseTree;
 import Models.State;
 import Models.Token;
+import Models.TreeNode;
+import Models.Token.TokenType;
 import Parser.LL1Parser;
 
 public class Runner {
-    public static ParseTree Run(String input) {
+    public static ParseTree<Token> Run(String input) {
         return Runner.Run(input, true);
     }
 
-    public static ParseTree Run(String input, boolean isVerbose) {
+    public static ParseTree<Token> Run(String input, boolean isVerbose) {
         var dfa = new Dfa(input);
         setupDFA(dfa);
 

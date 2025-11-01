@@ -75,7 +75,6 @@ public class ParseTree<T> {
         return terminals;
     }
 
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
