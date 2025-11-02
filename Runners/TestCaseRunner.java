@@ -27,7 +27,6 @@ public class TestCaseRunner {
     public static void Run() {
         var fileName = "testOutput.json";
         var testResults = new ArrayList<TestCase.TestCaseResult>();
-        var successCount = 0;
         for (var test : tests) {
             var resultTree = Runner.Run(test.getInput().toString(), false);
             var simplified = simplify(resultTree.getRoot());
@@ -38,9 +37,6 @@ public class TestCaseRunner {
                 result = simplified.toString().trim();
             }
             var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
-            if (testResult.getResult() == "PASS") {
-                successCount++;
-            }
             testResults.add(testResult);
             System.out.println(testResult + "\n");
         }
@@ -53,7 +49,7 @@ public class TestCaseRunner {
         } catch (IOException ex) {
             System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
-        System.out.println("PASSED " + successCount + "/" + tests.length);
+        System.out.println("PASSED " + testResults.stream().filter(x -> x.isPass()).count() + "/" + testResults.size());
     }
 
     private static List<Object> simplify(TreeNode<Token> node) {
