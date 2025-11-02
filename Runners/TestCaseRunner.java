@@ -50,6 +50,7 @@ public class TestCaseRunner {
             System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
         System.out.println("PASSED " + testResults.stream().filter(x -> x.isPass()).count() + "/" + testResults.size());
+        System.out.println("Test results outputted to " + System.getProperty("user.dir") + "/" + fileName);
     }
 
     private static List<Object> simplify(TreeNode<Token> node) {
