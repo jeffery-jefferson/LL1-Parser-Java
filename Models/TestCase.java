@@ -1,13 +1,14 @@
 package Models;
 
 public class TestCase {
-    public record TestCaseResult(String name, Object output, Object expectedOutput) {
+    public record TestCaseResult(String name, Object input, Object output, Object expectedOutput) {
         public boolean isPass() {
             return output.equals(expectedOutput);
         }
         @Override
         public String toString() {
             return "TEST CASE: " + name 
+            + "\nInput:" + input
             + "\nExpected output: " + expectedOutput 
             + "\nOutput: " + output 
             + "\n" + (isPass() ? "PASSED" : "FAILED");

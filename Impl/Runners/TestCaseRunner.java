@@ -8,10 +8,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import Exceptions.*;
+import Impl.Parser.ParseTreeSimplifier;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import Models.*;
-import Models.Token.TokenType;
 
 public class TestCaseRunner {
     private static final String testOutputFile = "testResults.json";
@@ -20,22 +23,34 @@ public class TestCaseRunner {
     public static void Run() {
         var mapper = new ObjectMapper();
         try (var writer = new FileWriter(testOutputFile)) {
+            // fetch tests from JSON file
             var tests = mapper.readValue(
                 new File(testInputFile), 
                 new TypeReference<List<TestCase>>() {}
             );
+
             var testResults = new ArrayList<TestCase.TestCaseResult>();
             for (var test : tests) {
-                var resultTree = Runner.Run(test.getInput().toString(), false);
-                var simplified = simplify(resultTree.getRoot());
-                String result = null;
-                if (simplified.size() == 1 && simplified.get(0) instanceof List<?>) {
-                    result = simplified.get(0).toString().trim();
-                } else {
-                    result = simplified.toString().trim();
+                ParseTree<Token> resultTree = null;
+                String exceptionMessage = null;
+
+                try {
+                    resultTree = Runner.Run(test.getInput().toString(), false);
+                } catch (NumberException | ExpressionException | InvalidNodeException ex) {
+                    exceptionMessage = ex.getMessage();
+                    System.out.println("An exception occurred");
                 }
-                var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+                
+                TestCase.TestCaseResult testResult = null;
+                if (exceptionMessage == null || exceptionMessage == "") {
+                    // simplify parse tree for ease of testing
+                    String result = ParseTreeSimplifier.simplifyToString(resultTree.getRoot());
+                    testResult = new TestCase.TestCaseResult(test.getName(), test.getInput(), result, test.getExpectedOutput());
+                } else {
+                    testResult = new TestCase.TestCaseResult(test.getName(), test.getInput(), exceptionMessage, test.getExpectedOutput());
+                }
                 testResults.add(testResult);
+                
                 System.out.println(testResult + "\n");
             }
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -48,31 +63,5 @@ public class TestCaseRunner {
         } catch (IOException ex) {
             System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
-    }
-
-    private static List<Object> simplify(TreeNode<Token> node) {
-        if (node == null) return null;
-
-        var value = node.getVal() == null ? null : node.getVal().toString();
-
-        if (node.getChildren() == null || node.getChildren().isEmpty()) {
-            if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
-                return List.of(value);
-            } else {
-                return new ArrayList<>();
-            }
-        }
-        var mergedChildren = new ArrayList<>();
-        for (var child : node.getChildren()) {
-            var simplifiedChildren = simplify(child);
-            if (!simplifiedChildren.isEmpty()) {
-                if (simplifiedChildren.size() == 1) {
-                    mergedChildren.addAll(simplifiedChildren);
-                } else {
-                    mergedChildren.add(simplifiedChildren);
-                }
-            }
-        }
-        return mergedChildren;
     }
 }
