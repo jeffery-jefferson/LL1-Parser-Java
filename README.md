@@ -58,6 +58,11 @@ Depending on your OS, the base command will change.
 
 Going forward, I will refer to the MacOS shell execution for simplicity. All parameters used are the same in both versions, so only the base command will be different.
 
+**Note:** If the file does not work with a permission denied error, you need to add execution files to run file.
+
+ - For MacOS use `chmod +x ./run.sh`
+ - For Windows, the CMD determines the file as executable by its file extension
+
 ## Parameters
 ```
 ./run.sh --test
