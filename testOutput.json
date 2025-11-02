@@ -1,0 +1,46 @@
+[ {
+  "name" : "SIMPLE NUMBER",
+  "output" : "[1]",
+  "expectedOutput" : "[1]",
+  "pass" : true
+}, {
+  "name" : "SIMPLE IDENTIFIER",
+  "output" : "[x]",
+  "expectedOutput" : "[x]",
+  "pass" : true
+}, {
+  "name" : "SIMPLE PAREN PLUS",
+  "output" : "[+, 2, 3]",
+  "expectedOutput" : "[+, 2, 3]",
+  "pass" : true
+}, {
+  "name" : "SIMPLE PAREN MULTIPLY",
+  "output" : "[×, x, 5]",
+  "expectedOutput" : "[×, x, 5]",
+  "pass" : true
+}, {
+  "name" : "NESTED NORMAL",
+  "output" : "[+, [×, 2, 3], 4]",
+  "expectedOutput" : "[+, [×, 2, 3], 4]",
+  "pass" : true
+}, {
+  "name" : "NESTED CONDITIONAL",
+  "output" : "[?, [=, x, 0], 1, 0]",
+  "expectedOutput" : "[?, [=, x, 0], 1, 0]",
+  "pass" : true
+}, {
+  "name" : "LAMBDA",
+  "output" : "[λ, x, x]",
+  "expectedOutput" : "[λ, x, x]",
+  "pass" : true
+}, {
+  "name" : "LET",
+  "output" : "[≜, y, 10, y]",
+  "expectedOutput" : "[≜, y, 10, y]",
+  "pass" : true
+}, {
+  "name" : "NESTED LAMBDA",
+  "output" : "[[λ, x, [+, x, 1]], 5]",
+  "expectedOutput" : "[[λ, x, [+, x, 1]], 5]",
+  "pass" : true
+} ]
