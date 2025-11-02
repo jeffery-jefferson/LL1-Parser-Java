@@ -63,7 +63,7 @@ Going forward, I will refer to the MacOS shell execution for simplicity. All par
  - For MacOS use `chmod +x ./run.sh`
  - For Windows, the CMD determines the file as executable by its file extension
 
-**Note:** If the file does not work with a "command java not found" error, you will need to install the Java Runtime (JRE) to run the software
+**Note:** If the file does not work with a "command java not found" error, you will need to install the Java Runtime (JRE) to run the software. Although, it is better to install the JDK instead since the program will compile if there are no classes found in the /out folder.
 
 ## Parameters
 ```
