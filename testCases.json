@@ -1,0 +1,7 @@
+[
+    {
+        "name": "TEST EXAMPLE",
+        "input": "(+ 1 2)",
+        "expectedOutput": "[+, 1, 2]"
+    }
+]

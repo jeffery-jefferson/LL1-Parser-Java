@@ -18,6 +18,7 @@ public class TestCase {
     private Object expectedOutput;
     private String name;
 
+    public TestCase() {}
     public TestCase(String name, Object input, Object expectedOutput) {
         this.name = name;
         this.input = input;
