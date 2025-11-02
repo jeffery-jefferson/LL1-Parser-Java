@@ -48,6 +48,8 @@ public class Runner {
         return result;
     }
 
+    // this is pretty chunky since every transition is technically possible
+    // I wanted to reuse the DFA architecture so...
     static void setupDFA(Dfa dfa) {
         var start = new State("START");
         var number = new State("NUMBER");

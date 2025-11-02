@@ -28,10 +28,10 @@ echo ""
 
 if [ "$TEST_FLAG" = true ]; then
     echo "Running Tests"
-    java -cp "$TMP_DIR:libs/*" Program true
+    java -cp "$TMP_DIR:libs/*" Impl/Program true
 else
     echo "Running Program"
-    java -cp "$TMP_DIR:libs/*" Program
+    java -cp "$TMP_DIR:libs/*" Impl/Program
 fi
 
 echo ""
