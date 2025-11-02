@@ -6,6 +6,13 @@ By Mark Ureta
 
 This is a simple LL(1) Parser implementation that recognises the MiniLisp grammar.
 
+# Structure
+This is implemented through 3 different things. idk
+
+# MiniLisp Grammar
+```
+```
+
 # Execution
 ## MacOS
 ```bash
