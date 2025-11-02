@@ -10,41 +10,27 @@ import Impl.Parser.ParseTreeSimplifier;
 import Models.*;
 
 public class Runner {
-    public static ParseTree<Token> Run(String input) {
+    public static ParseTree<Token> Run(String input) throws NumberException, ExpressionException, InvalidNodeException {
         return Runner.Run(input, true);
     }
 
-    public static ParseTree<Token> Run(String input, boolean isVerbose) {
+    public static ParseTree<Token> Run(String input, boolean isVerbose) throws NumberException, ExpressionException, InvalidNodeException {
         var dfa = new Dfa(input);
         setupDFA(dfa);
 
         var lexer = new Lexer(dfa);
 
         List<Token> tokens = null;
-        try {
-            tokens = lexer.Tokenize(input, isVerbose);
-        } catch (NumberException ex) {
-            System.out.println("Malformed number: " + ex.getMessage());
-            return null;
-        } catch (ExpressionException ex) {
-            System.out.println("Invalid expression: " + ex.getMessage());
-            return null;
-        }
+        tokens = lexer.Tokenize(input, isVerbose);
+
         if (isVerbose) {
             System.out.println("Tokens: " + tokens.toString());
         }
 
         var parser = new LL1Parser(input);
         ParseTree<Token> result = null;
-        try {
-            result = parser.Parse(tokens, isVerbose);
-        } catch (ExpressionException ex) {
-            System.out.println("Invalid expression: " + ex.getMessage());
-            return null;
-        } catch (InvalidNodeException ex) {
-            System.out.println("An error occurred during parse tree generation: " + ex.getMessage());
-            return null;
-        }
+        result = parser.Parse(tokens, isVerbose);
+
         if (isVerbose) {
             System.out.println("\nParse Tree:");
             System.out.println(result);

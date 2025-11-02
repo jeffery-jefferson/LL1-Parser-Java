@@ -9,6 +9,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import Exceptions.*;
 import Impl.Parser.ParseTreeSimplifier;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -30,7 +31,15 @@ public class TestCaseRunner {
 
             var testResults = new ArrayList<TestCase.TestCaseResult>();
             for (var test : tests) {
-                var resultTree = Runner.Run(test.getInput().toString(), false);
+                ParseTree<Token> resultTree = null;
+                String exceptionMessage = null;
+                
+                try {
+                    resultTree = Runner.Run(test.getInput().toString(), false);
+                } catch (NumberException | ExpressionException | InvalidNodeException ex) {
+                    exceptionMessage = ex.getMessage();
+                } 
+                
                 // simplify parse tree for ease of testing
                 String result = ParseTreeSimplifier.simplifyToString(resultTree.getRoot());
                 var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
