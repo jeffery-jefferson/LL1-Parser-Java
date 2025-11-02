@@ -4,7 +4,6 @@ set -e  # exit immediately if a command fails
 
 TEST_FLAG=false
 
-# parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         --test|-t)

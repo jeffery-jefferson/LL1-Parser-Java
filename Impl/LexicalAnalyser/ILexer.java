@@ -7,5 +7,4 @@ import Exceptions.NumberException;
 import Models.Token;
 
 public interface ILexer {
-    public List<Token> Tokenize(String input) throws NumberException, ExpressionException;
-}
+    public List<Token> Tokenize(String input) throws NumberException, ExpressionExceptio

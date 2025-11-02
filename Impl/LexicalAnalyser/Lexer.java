@@ -130,6 +130,4 @@ public class Lexer implements ILexer {
         for (char c : charArray) {
             sb.append(c);
         }
-        return sb.toString();
-	}
-}
+        return sb.toStri
