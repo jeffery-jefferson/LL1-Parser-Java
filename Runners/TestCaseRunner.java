@@ -15,23 +15,32 @@ public class TestCaseRunner {
     private static TestCase[] tests = new TestCase[] {
         new TestCase("SIMPLE NUMBER", "1", "[1]"),
         new TestCase("SIMPLE IDENTIFIER", "x", "[x]"),
-        new TestCase("SIMPLE PAREN PLUS", "(+ 2 3)", "[[(, [+, 2, 3], )]]"),
-        new TestCase("SIMPLE PAREN MULTIPLY", "(× x 5)", "[[(, [×, x, 5], )]]"),
-        new TestCase("NESTED NORMAL", "(+ (× 2 3) 4)", "[[(, [+, [(, [×, 2, 3], )], 4], )]]"),
-        new TestCase("NESTED CONDITIONAL", "(? (= x 0) 1 0)", "[[(, [?, [(, [=, x, 0], )], 1, 0], )]]"),
-        new TestCase("LAMBDA", "(λ x x)", "[[(, [λ, x, x], )]]"),
-        new TestCase("LET", "(≜ y 10 y)", "[[(, [≜, y, 10, y], )]]"),
-        new TestCase("NESTED LAMBDA", "((λ x (+ x 1)) 5)", "[[(, [[(, [λ, x, [(, [+, x, 1], )]], )], 5], )]]"),
+        new TestCase("SIMPLE PAREN PLUS", "(+ 2 3)", "[+, 2, 3]"),
+        new TestCase("SIMPLE PAREN MULTIPLY", "(× x 5)", "[×, x, 5]"),
+        new TestCase("NESTED NORMAL", "(+ (× 2 3) 4)", "[+, [×, 2, 3], 4]"),
+        new TestCase("NESTED CONDITIONAL", "(? (= x 0) 1 0)", "[?, [=, x, 0], 1, 0]"),
+        new TestCase("LAMBDA", "(λ x x)", "[λ, x, x]"),
+        new TestCase("LET", "(≜ y 10 y)", "[≜, y, 10, y]"),
+        new TestCase("NESTED LAMBDA", "((λ x (+ x 1)) 5)", "[[λ, x, [+, x, 1]], 5]"),
     };
 
     public static void Run() {
         var fileName = "testOutput.json";
         var testResults = new ArrayList<TestCase.TestCaseResult>();
-
+        var successCount = 0;
         for (var test : tests) {
             var resultTree = Runner.Run(test.getInput().toString(), false);
-            var result = simplify(resultTree.getRoot()).toString().trim();
+            var simplified = simplify(resultTree.getRoot());
+            String result = null;
+            if (simplified.size() == 1 && simplified.get(0) instanceof List<?>) {
+                result = simplified.get(0).toString().trim();
+            } else {
+                result = simplified.toString().trim();
+            }
             var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+            if (testResult.getResult() == "PASS") {
+                successCount++;
+            }
             testResults.add(testResult);
             System.out.println(testResult + "\n");
         }
@@ -44,6 +53,7 @@ public class TestCaseRunner {
         } catch (IOException ex) {
             System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
+        System.out.println("PASSED " + successCount + "/" + tests.length);
     }
 
     private static List<Object> simplify(TreeNode<Token> node) {
@@ -53,7 +63,7 @@ public class TestCaseRunner {
 
         // leaf nodes -> also the same as non-terminal symbols
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
-            if (node.getVal().Type != TokenType.EMPTY) {
+            if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
                 return List.of(value);
             } else {
                 return new ArrayList<>();
