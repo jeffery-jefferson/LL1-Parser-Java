@@ -14,12 +14,6 @@ import Models.Token.TokenType;
 import Models.TreeNode;
 
 public class LL1Parser {
-    /*
-    PARSING TABLE Structure
-        - ROWS are NON-TERMINALS represented by Character
-        - COLUMNS are TERMINALS represented by Character
-        - CELLS are Production Rules which dictate how to pop and push to and from the stack
-    */
     private Map<Character, Token> nonTerminals;
     private List<ProductionRule> rules;
 
@@ -107,10 +101,7 @@ public class LL1Parser {
             }
 
             var top = stack.peek();
-            // get current tree node based on stack top token (this is value of tree node)
             var currentTreeNode = parseTree.getTreeNode(top);
-            // if there is no node in the tree of that value then we should throw 
-            // since it should have already been pushed to the stack in the last iteration
             if (currentTreeNode == null) {
                 throw new ExpressionException("Stack top has a token \"" + top.getVal() +  "\" which was not found in the parse tree.");
             }
@@ -121,7 +112,6 @@ public class LL1Parser {
 
             if (row == null || row.isEmpty()) {
                 if (top.Type.equals(currentToken.Type)) {
-                    // janky fix for parse tree but we should check the first exposed child node with the same type and assign the value here
                     var treeNode = getFirstExposedTreeNodeWithoutTokenValueOfType(parseTree, top.Type);
                     if (treeNode != null) {
                         treeNode.SetValue(currentToken);
@@ -135,7 +125,6 @@ public class LL1Parser {
                     throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' " + currentToken.Type);
                 }
             } else {
-                // we add to the parse tree here...
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {

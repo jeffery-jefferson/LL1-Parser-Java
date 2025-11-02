@@ -14,18 +14,6 @@ import Models.*;
 import Models.Token.TokenType;
 
 public class TestCaseRunner {
-    // private static TestCase[] tests = new TestCase[] {
-    //     new TestCase("SIMPLE NUMBER", "1", "[1]"),
-    //     new TestCase("SIMPLE IDENTIFIER", "x", "[x]"),
-    //     new TestCase("SIMPLE PAREN PLUS", "(+ 2 3)", "[+, 2, 3]"),
-    //     new TestCase("SIMPLE PAREN MULTIPLY", "(× x 5)", "[×, x, 5]"),
-    //     new TestCase("NESTED NORMAL", "(+ (× 2 3) 4)", "[+, [×, 2, 3], 4]"),
-    //     new TestCase("NESTED CONDITIONAL", "(? (= x 0) 1 0)", "[?, [=, x, 0], 1, 0]"),
-    //     new TestCase("LAMBDA", "(λ x x)", "[λ, x, x]"),
-    //     new TestCase("LET", "(≜ y 10 y)", "[≜, y, 10, y]"),
-    //     new TestCase("NESTED LAMBDA", "((λ x (+ x 1)) 5)", "[[λ, x, [+, x, 1]], 5]"),
-    // };
-
     private static final String testOutputFile = "testResults.json";
     private static final String testInputFile = "testCases.json";
 
