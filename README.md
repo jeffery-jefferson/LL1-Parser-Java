@@ -42,9 +42,14 @@ This orchestrates all the moving parts by tying together the Lexer and the Parse
 This runs test cases provided in the `testCases.json` file. For simplicity, it flattens the parse tree into a more readable nested list format and uses this for validation.
 
 ## Program
-This is the sole entry point for the whole program. It is executed by the `run` scripts since we have no compilation frameworks like Gradle or Maven, and we use external libraries for JSONifying the test cases; to compile and run the program manually would be a pain to remember and execute.
+This is the sole entry point for the whole program. It is executed by the `run` scripts.
+
+## `run.sh` / `run.bat`
+These were created to automate the compilation and running process. Since we do not use any compilation frameworks like Maven or Gradle, and additionally we use the jackson external library for JSONifying, a script makes it much easier to run the software without having to memorise complicated multistep `javac` and `java` commands.
 
 # Execution
+
+The first step is to pull this repository to your local machine. Next navigate to the folder where you have pulled this repository to as all actions will take place here.
 
 Depending on your OS, the base command will change.
 
