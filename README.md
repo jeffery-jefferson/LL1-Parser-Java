@@ -63,6 +63,8 @@ Going forward, I will refer to the MacOS shell execution for simplicity. All par
  - For MacOS use `chmod +x ./run.sh`
  - For Windows, the CMD determines the file as executable by its file extension
 
+**Note:** If the file does not work with a "javac" command not found, you will need to install a JDK before running.
+
 ## Parameters
 ```
 ./run.sh --test
