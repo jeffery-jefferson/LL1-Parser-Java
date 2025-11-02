@@ -18,4 +18,7 @@ public class Program {
             scanner.close();
 
             var result = Runner.Run(input);
-            System.out.println(res
+            System.out.println(result);
+        }
+    }
+}

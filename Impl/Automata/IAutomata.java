@@ -20,4 +20,5 @@ public interface IAutomata {
     public void AddTransition(State fromState, State toState, Character inputCharacter);
     public void AddTransition(String fromStateName, String toStateName, Character inputCharacter);
     public void SetStartState(String stateName);
-    public void SetStartState(State state
+    public void SetStartState(State state);
+}

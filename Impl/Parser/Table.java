@@ -47,4 +47,5 @@ public class Table<TRow, TCol, TVal> {
 
     public TVal Get(TRow row, TCol col) {
         return this.table.get(new Pair<TRow, TCol>(row, col));
-  
+    }
+}
