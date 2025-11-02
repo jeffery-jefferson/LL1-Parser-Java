@@ -1,11 +1,11 @@
-package LexicalAnalyser;
+package Impl.LexicalAnalyser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Automata.Dfa;
 import Exceptions.ExpressionException;
 import Exceptions.NumberException;
+import Impl.Automata.Dfa;
 import Models.Token;
 
 public class Lexer implements ILexer {

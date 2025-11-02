@@ -1,4 +1,4 @@
-package Parser;
+package Impl.Parser;
 
 import java.util.HashMap;
 import java.util.ArrayList;
