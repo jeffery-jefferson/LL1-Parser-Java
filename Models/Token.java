@@ -9,21 +9,7 @@ public class Token {
     public TokenType Type;
 
     public enum TokenType {
-        NUMBER, 
-        WHITESPACE, 
-        IDENTIFIER, 
-        PLUS, 
-        MULTIPLY, 
-        MINUS, 
-        EQUALS, 
-        CONDITIONAL,
-        LAMBDA,
-        LET,
-        OPEN_PARENTHESES,
-        CLOSE_PARENTHESES,
-        NON_TERMINAL,
-        EMPTY,
-        END
+        NUMBER, WHITESPACE, IDENTIFIER, PLUS, MULTIPLY, MINUS, EQUALS, CONDITIONAL, LAMBDA, LET, OPEN_PARENTHESES, CLOSE_PARENTHESES, NON_TERMINAL, EMPTY, END
     }
 
     public Token() {}
@@ -55,7 +41,6 @@ public class Token {
             result = TokenType.NUMBER;
         } catch (NumberFormatException ex) {
             if (tokenString.length() > 1) {
-                // must be id
                 result = TokenType.IDENTIFIER;
             } else {
                 var tokenCharValue = tokenString.charAt(0);

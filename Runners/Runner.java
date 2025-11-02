@@ -1,24 +1,11 @@
 package Runners;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import Automata.Dfa;
-import Exceptions.ExpressionException;
-import Exceptions.InvalidNodeException;
-import Exceptions.NumberException;
+import Exceptions.*;
 import LexicalAnalyser.Lexer;
-import Models.ParseTree;
-import Models.State;
-import Models.Token;
-import Models.TreeNode;
-import Models.Token.TokenType;
+import Models.*;
 import Parser.LL1Parser;
 
 public class Runner {
@@ -32,9 +19,6 @@ public class Runner {
 
         var lexer = new Lexer(dfa);
 
-        // another tokenization strategy is to use an FST (Finite-State Transducer)
-        // logic is on Lecture 6 slide 13
-        // although this seems to enforce whitespaces at places like after operators
         List<Token> tokens = null;
         try {
             tokens = lexer.Tokenize(input, isVerbose);
@@ -45,9 +29,10 @@ public class Runner {
             System.out.println("Invalid expression: " + ex.getMessage());
             return null;
         }
-        System.out.println("Tokens: " + tokens.toString());
+        if (isVerbose) {
+            System.out.println("Tokens: " + tokens.toString());
+        }
 
-        // now parse + parse tree
         var parser = new LL1Parser(input);
         ParseTree<Token> result = null;
         try {

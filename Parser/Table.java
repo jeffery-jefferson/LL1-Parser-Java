@@ -5,13 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Table<TRow, TCol, TVal> {
-    /*
-     * I'm thinking this is just a wrapper for a map with easier access
-     * Rows and columns won't be tokens anymore, they will just be strings.
-     * 
-     * In this way, we can more easily compare stuff and it's just more flexible.
-     * The upper implementing class should determine which columns and rows.
-     */
     private record Pair<A, B>(A first, B second) {}
 
     private HashMap<Pair<TRow, TCol>, TVal> table;

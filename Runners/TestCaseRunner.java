@@ -1,63 +1,52 @@
 package Runners;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.core.type.TypeReference;
 
-import Models.TestCase;
-import Models.TestGroup;
-import Models.Token;
+import Models.*;
 import Models.Token.TokenType;
-import Models.TreeNode;
 
 public class TestCaseRunner {
-    private static TestGroup[] testCases = new TestGroup[] {
-        new TestGroup("Simple Valid", new String[] {
-            "(x)",
-            "(+ 1 1)"
-        }),
-    };
-
-    private static TestCase[] tests = new TestCase[] {
-        new TestCase("SIMPLE NUMBER", "1", "[1]"),
-    };
+    private static final String testOutputFile = "testResults.json";
+    private static final String testInputFile = "testCases.json";
 
     public static void Run() {
-        var fileName = "testOutput.txt";
-        for (var testCase : testCases) {
-            for (var testInput : testCase.GetInputs()) {
-                System.out.println("TEST RUN: " + testCase.GetName());
-                var result = Runner.Run(testInput, false);
-                var mapper = new ObjectMapper();
-                mapper.enable(SerializationFeature.INDENT_OUTPUT);
-                String jsonResult = "";
-                try {
-                    jsonResult = mapper.writeValueAsString(result);
-                } catch (JsonProcessingException ex) {
-                    System.out.println("An error occurred during parse tree JSON conversion: " + ex.getMessage());
-                    return;
+        var mapper = new ObjectMapper();
+        try (var writer = new FileWriter(testOutputFile)) {
+            var tests = mapper.readValue(
+                new File(testInputFile), 
+                new TypeReference<List<TestCase>>() {}
+            );
+            var testResults = new ArrayList<TestCase.TestCaseResult>();
+            for (var test : tests) {
+                var resultTree = Runner.Run(test.getInput().toString(), false);
+                var simplified = simplify(resultTree.getRoot());
+                String result = null;
+                if (simplified.size() == 1 && simplified.get(0) instanceof List<?>) {
+                    result = simplified.get(0).toString().trim();
+                } else {
+                    result = simplified.toString().trim();
                 }
-                System.out.println(simplify(result.getRoot()));
-                System.out.println(jsonResult != "" ? "PASSED" : "FAILED");
-                System.out.println("\n");
-
-                try (FileWriter writer = new FileWriter(fileName, false)) {
-                    writer.write("TEST RUN: " + testCase.GetName());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                try (FileWriter writer = new FileWriter(fileName, true)) { 
-                    writer.write(jsonResult + "\n\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+                testResults.add(testResult);
+                System.out.println(testResult + "\n");
             }
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            var results = mapper.writeValueAsString(testResults);
+            writer.write(results);
+
+            System.out.println("PASSED " + testResults.stream().filter(x -> x.isPass()).count() + "/" + testResults.size());
+            System.out.println("Test results outputted to " + System.getProperty("user.dir") + "/" + testOutputFile);
+
+        } catch (IOException ex) {
+            System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
     }
 
@@ -68,7 +57,7 @@ public class TestCaseRunner {
 
         // leaf nodes -> also the same as non-terminal symbols
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
-            if (node.getVal().Type != TokenType.EMPTY) {
+            if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
                 return List.of(value);
             } else {
                 return new ArrayList<>();
@@ -76,15 +65,13 @@ public class TestCaseRunner {
         }
         // non terminals always have children
         var mergedChildren = new ArrayList<>();
-        if (node.getVal().Type == TokenType.NON_TERMINAL) {
-            for (var child : node.getChildren()) {
-                var simplifiedChildren = simplify(child);
-                if (!simplifiedChildren.isEmpty()) {
-                    if (simplifiedChildren.size() == 1) {
-                        mergedChildren.addAll(simplifiedChildren);
-                    } else {
-                        mergedChildren.add(simplifiedChildren);
-                    }
+        for (var child : node.getChildren()) {
+            var simplifiedChildren = simplify(child);
+            if (!simplifiedChildren.isEmpty()) {
+                if (simplifiedChildren.size() == 1) {
+                    mergedChildren.addAll(simplifiedChildren);
+                } else {
+                    mergedChildren.add(simplifiedChildren);
                 }
             }
         }

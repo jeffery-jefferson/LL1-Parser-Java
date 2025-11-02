@@ -1,10 +1,23 @@
+import java.util.Scanner;
+
 import Runners.Runner;
 import Runners.TestCaseRunner;
 
 public class Program {
     public static void main(String[] args) {
-        // based on args we should choose test case runner or normal runner
-        TestCaseRunner.Run();
-        //Runner.Run("(+ 1 1)");
+        String runTests = args.length >= 1 ? args[0] : "false";
+        if (Boolean.parseBoolean(runTests)) {
+            TestCaseRunner.Run();
+        } else {
+            System.out.println("LL1 Parser - Mark Ureta 2025");
+            System.out.println("Please enter input: ");
+            
+            var scanner = new Scanner(System.in);
+            var input = scanner.nextLine();
+            scanner.close();
+
+            var result = Runner.Run(input);
+            System.out.println(result);
+        }
     }
 }
