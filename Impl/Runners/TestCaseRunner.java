@@ -56,11 +56,14 @@ public class TestCaseRunner {
     private static List<Object> simplify(TreeNode<Token> node) {
         if (node == null) return null;
 
-        var value = node.getVal() == null ? null : node.getVal().toString();
+        var value = node.getVal() == null ? null : node.getVal();
 
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
             if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
-                return List.of(value);
+                if (node.getVal().Type == TokenType.NUMBER || node.getVal().Type == TokenType.IDENTIFIER) {
+                    return List.of(value.toString());
+                }
+                return List.of(value.Type.toString());
             } else {
                 return new ArrayList<>();
             }

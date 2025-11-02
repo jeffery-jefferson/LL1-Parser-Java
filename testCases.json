@@ -2,7 +2,7 @@
     {
         "name": "TEST EXAMPLE",
         "input": "(+ 1 2)",
-        "expectedOutput": "[+, 1, 2]"
+        "expectedOutput": "[PLUS, 1, 2]"
     },
     {
         "name": "SIMPLE NUMBER",
@@ -27,41 +27,41 @@
     {
         "name": "SIMPLE PAREN-EXPR",
         "input": "(+ 1 2)",
-        "expectedOutput": "[+, 1, 2]"
+        "expectedOutput": "[PLUS, 1, 2]"
     },
     {
         "name": "NESTED PAREN-EXPR",
         "input": "(+ 1 (× 2 3))",
-        "expectedOutput": "[+, 1, [×, 2, 3]]"
+        "expectedOutput": "[PLUS, 1, [MULTIPLY, 2, 3]]"
     },
     {
         "name": "SIMPLE LAMBDA",
         "input": "(λ x 1)",
-        "expectedOutput": "[λ, x, 1]"
+        "expectedOutput": "[LAMBDA, x, 1]"
     },
     {
         "name": "NESTED LAMBDA",
         "input": "(λ x (+ x 1))",
-        "expectedOutput": "[λ, x, [+, x, 1]]"
+        "expectedOutput": "[LAMBDA, x, [PLUS, x, 1]]"
     },
     {
         "name": "SIMPLE CONDITIONAL",
         "input": "(? 1 2 3)",
-        "expectedOutput": "[?, 1, 2, 3]"
+        "expectedOutput": "[CONDITIONAL, 1, 2, 3]"
     },
     {
         "name": "NESTED CONDITIONAL",
         "input": "(? (= 1 1) 2 3)",
-        "expectedOutput": "[?, [=, 1, 1], 2, 3]"
+        "expectedOutput": "[CONDITIONAL, [EQUALS, 1, 1], 2, 3]"
     },
     {
         "name": "SIMPLE LET",
         "input": "(≜ y 10 y)",
-        "expectedOutput": "[≜, y, 10, y]"
+        "expectedOutput": "[LET, y, 10, y]"
     },
     {
         "name": "NESTED LET",
         "input": "(≜ y (+ 1 2) y)",
-        "expectedOutput": "[≜, y, [+, 1, 2], y]"
+        "expectedOutput": "[LET, y, [PLUS, 1, 2], y]"
     }
 ]
