@@ -73,5 +73,10 @@
         "name": "MISSING EXPRESSION",
         "input": "(+ 1)",
         "expectedOutput": "No production rule for '<expr>' generates expected ')'"
+    },
+    {
+        "name": "INCORRECT NUMBER OF ARGUMENTS",
+        "input": "(+ 1 2 3)",
+        "expectedOutput": "Expected ')' but instead was '3'"
     }
 ]

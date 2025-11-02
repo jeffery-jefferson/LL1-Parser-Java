@@ -123,7 +123,7 @@ public class LL1Parser {
                         System.out.println("\tConsumed symbol '" + currentToken.getVal() + "'");
                     }
                 } else {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' ");
+                    throw new ExpressionException("Expected '" + stack.peek() + "' but instead was '" + currentToken.getVal() + "'");
                 }
             } else {
                 var rule = row.get(currentToken.Type);
