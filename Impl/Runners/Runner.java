@@ -6,6 +6,7 @@ import Exceptions.*;
 import Impl.Automata.Dfa;
 import Impl.LexicalAnalyser.Lexer;
 import Impl.Parser.LL1Parser;
+import Impl.Parser.ParseTreeSimplifier;
 import Models.*;
 
 public class Runner {
@@ -44,7 +45,12 @@ public class Runner {
             System.out.println("An error occurred during parse tree generation: " + ex.getMessage());
             return null;
         }
-        
+        if (isVerbose) {
+            System.out.println("\nParse Tree:");
+            System.out.println(result);
+            System.out.println("Simplified representation:");
+            System.out.println(ParseTreeSimplifier.simplifyToString(result.getRoot()));
+        }
         return result;
     }
 

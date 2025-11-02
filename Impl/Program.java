@@ -17,8 +17,7 @@ public class Program {
             var input = scanner.nextLine();
             scanner.close();
 
-            var result = Runner.Run(input);
-            System.out.println(result);
+            Runner.Run(input);
         }
     }
 }

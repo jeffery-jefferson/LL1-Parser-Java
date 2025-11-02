@@ -8,10 +8,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import Impl.Parser.ParseTreeSimplifier;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import Models.*;
-import Models.Token.TokenType;
 
 public class TestCaseRunner {
     private static final String testOutputFile = "testResults.json";
@@ -30,13 +32,7 @@ public class TestCaseRunner {
             for (var test : tests) {
                 var resultTree = Runner.Run(test.getInput().toString(), false);
                 // simplify parse tree for ease of testing
-                var simplified = simplify(resultTree.getRoot());
-                String result = null;
-                if (simplified.size() == 1 && simplified.get(0) instanceof List<?>) {
-                    result = simplified.get(0).toString().trim();
-                } else {
-                    result = simplified.toString().trim();
-                }
+                String result = ParseTreeSimplifier.simplifyToString(resultTree.getRoot());
                 var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
                 testResults.add(testResult);
                 System.out.println(testResult + "\n");
@@ -51,34 +47,5 @@ public class TestCaseRunner {
         } catch (IOException ex) {
             System.out.println("Could not JSONify test results: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
-    }
-
-    private static List<Object> simplify(TreeNode<Token> node) {
-        if (node == null) return null;
-
-        var value = node.getVal() == null ? null : node.getVal();
-
-        if (node.getChildren() == null || node.getChildren().isEmpty()) {
-            if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
-                if (node.getVal().Type == TokenType.NUMBER || node.getVal().Type == TokenType.IDENTIFIER) {
-                    return List.of(value.toString());
-                }
-                return List.of(value.Type.toString());
-            } else {
-                return new ArrayList<>();
-            }
-        }
-        var mergedChildren = new ArrayList<>();
-        for (var child : node.getChildren()) {
-            var simplifiedChildren = simplify(child);
-            if (!simplifiedChildren.isEmpty()) {
-                if (simplifiedChildren.size() == 1) {
-                    mergedChildren.addAll(simplifiedChildren);
-                } else {
-                    mergedChildren.add(simplifiedChildren);
-                }
-            }
-        }
-        return mergedChildren;
     }
 }
