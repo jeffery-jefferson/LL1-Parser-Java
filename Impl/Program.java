@@ -1,7 +1,8 @@
+package Impl;
 import java.util.Scanner;
 
-import Runners.Runner;
-import Runners.TestCaseRunner;
+import Impl.Runners.Runner;
+import Impl.Runners.TestCaseRunner;
 
 public class Program {
     public static void main(String[] args) {

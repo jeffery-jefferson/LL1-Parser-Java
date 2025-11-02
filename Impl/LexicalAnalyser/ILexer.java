@@ -1,4 +1,4 @@
-package LexicalAnalyser;
+package Impl.LexicalAnalyser;
 
 import java.util.List;
 

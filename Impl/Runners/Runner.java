@@ -1,12 +1,12 @@
-package Runners;
+package Impl.Runners;
 
 import java.util.List;
 
-import Automata.Dfa;
 import Exceptions.*;
-import LexicalAnalyser.Lexer;
+import Impl.Automata.Dfa;
+import Impl.LexicalAnalyser.Lexer;
+import Impl.Parser.LL1Parser;
 import Models.*;
-import Parser.LL1Parser;
 
 public class Runner {
     public static ParseTree<Token> Run(String input) {
@@ -48,6 +48,8 @@ public class Runner {
         return result;
     }
 
+    // this is pretty chunky since every transition is technically possible
+    // I wanted to reuse the DFA architecture so...
     static void setupDFA(Dfa dfa) {
         var start = new State("START");
         var number = new State("NUMBER");
@@ -98,8 +100,6 @@ public class Runner {
             dfa.AddTransition(let, identifier, (char)('A' + i));
             dfa.AddTransition(whitespace, identifier, (char)('a' + i));
             dfa.AddTransition(whitespace, identifier, (char)('A' + i));
-            dfa.AddTransition(identifier, whitespace, (char)('a' + i));
-            dfa.AddTransition(identifier, whitespace, (char)('A' + i));
             dfa.AddTransition(openParentheses, identifier, (char)('a' + i));
             dfa.AddTransition(openParentheses, identifier, (char)('A' + i));
         }

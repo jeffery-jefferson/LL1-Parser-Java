@@ -1,4 +1,4 @@
-package Automata;
+package Impl.Automata;
 
 import java.util.List;
 

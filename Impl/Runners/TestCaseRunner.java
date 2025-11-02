@@ -1,4 +1,4 @@
-package Runners;
+package Impl.Runners;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -55,7 +55,6 @@ public class TestCaseRunner {
 
         var value = node.getVal() == null ? null : node.getVal().toString();
 
-        // leaf nodes -> also the same as non-terminal symbols
         if (node.getChildren() == null || node.getChildren().isEmpty()) {
             if (node.getVal().Type != TokenType.EMPTY && node.getVal().Type != TokenType.OPEN_PARENTHESES && node.getVal().Type != TokenType.CLOSE_PARENTHESES) {
                 return List.of(value);
@@ -63,7 +62,6 @@ public class TestCaseRunner {
                 return new ArrayList<>();
             }
         }
-        // non terminals always have children
         var mergedChildren = new ArrayList<>();
         for (var child : node.getChildren()) {
             var simplifiedChildren = simplify(child);
