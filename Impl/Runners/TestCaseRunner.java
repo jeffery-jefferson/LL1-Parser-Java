@@ -33,17 +33,24 @@ public class TestCaseRunner {
             for (var test : tests) {
                 ParseTree<Token> resultTree = null;
                 String exceptionMessage = null;
-                
+
                 try {
                     resultTree = Runner.Run(test.getInput().toString(), false);
                 } catch (NumberException | ExpressionException | InvalidNodeException ex) {
                     exceptionMessage = ex.getMessage();
-                } 
+                    System.out.println("An exception occurred");
+                }
                 
-                // simplify parse tree for ease of testing
-                String result = ParseTreeSimplifier.simplifyToString(resultTree.getRoot());
-                var testResult = new TestCase.TestCaseResult(test.getName(), result, test.getExpectedOutput());
+                TestCase.TestCaseResult testResult = null;
+                if (exceptionMessage == null || exceptionMessage == "") {
+                    // simplify parse tree for ease of testing
+                    String result = ParseTreeSimplifier.simplifyToString(resultTree.getRoot());
+                    testResult = new TestCase.TestCaseResult(test.getName(), test.getInput(), result, test.getExpectedOutput());
+                } else {
+                    testResult = new TestCase.TestCaseResult(test.getName(), test.getInput(), exceptionMessage, test.getExpectedOutput());
+                }
                 testResults.add(testResult);
+                
                 System.out.println(testResult + "\n");
             }
             mapper.enable(SerializationFeature.INDENT_OUTPUT);

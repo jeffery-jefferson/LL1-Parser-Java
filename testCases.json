@@ -63,5 +63,15 @@
         "name": "NESTED LET",
         "input": "(≜ y (+ 1 2) y)",
         "expectedOutput": "[LET, y, [PLUS, 1, 2], y]"
+    },
+    {
+        "name": "MISSING PARENTHESES",
+        "input": "(+ 1 2",
+        "expectedOutput": "The stack was not empty after parsing was finished. Expected: )"
+    },
+    {
+        "name": "MISSING EXPRESSION",
+        "input": "(+ 1)",
+        "expectedOutput": "No production rule for '<expr>' generates expected ')'"
     }
 ]

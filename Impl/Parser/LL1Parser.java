@@ -123,13 +123,13 @@ public class LL1Parser {
                         System.out.println("\tConsumed symbol '" + currentToken.getVal() + "'");
                     }
                 } else {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' " + currentToken.Type);
+                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' ");
                 }
             } else {
                 var rule = row.get(currentToken.Type);
 
                 if (rule == null) {
-                    throw new ExpressionException("No production rule for this token. '" + currentToken.getVal() + "' " + currentToken.Type);
+                    throw new ExpressionException("No production rule for '" + top + "' generates expected '" + currentToken.getVal() + "'");
                 }
 
                 stack.pop();
@@ -150,9 +150,14 @@ public class LL1Parser {
             }
         }
 
+        if (currentInputTokenIndex < tokens.size()) {
+            var remaining = tokens.subList(currentInputTokenIndex, tokens.size());
+            throw new ExpressionException("Parsing was not finished. Expected : " + remaining);
+        }
+
         var endSymbol = stack.pop();
         if (!endSymbol.getVal().toString().equals("$")) {
-            throw new ExpressionException("The stack was not empty after parsing was finished.");
+            throw new ExpressionException("The stack was not empty after parsing was finished. Expected: " + endSymbol);
         }
 
         if (isVerbose) {
