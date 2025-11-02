@@ -20,13 +20,16 @@ public class TestCaseRunner {
     public static void Run() {
         var mapper = new ObjectMapper();
         try (var writer = new FileWriter(testOutputFile)) {
+            // fetch tests from JSON file
             var tests = mapper.readValue(
                 new File(testInputFile), 
                 new TypeReference<List<TestCase>>() {}
             );
+
             var testResults = new ArrayList<TestCase.TestCaseResult>();
             for (var test : tests) {
                 var resultTree = Runner.Run(test.getInput().toString(), false);
+                // simplify parse tree for ease of testing
                 var simplified = simplify(resultTree.getRoot());
                 String result = null;
                 if (simplified.size() == 1 && simplified.get(0) instanceof List<?>) {
