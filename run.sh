@@ -17,20 +17,28 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-TMP_DIR=$(mktemp -d)
-trap "rm -rf $TMP_DIR" EXIT # temp directory deleted on script exit
+OUT_DIR="./out"
 
-echo "Compiling Java files into $TMP_DIR..."
-javac -d "$TMP_DIR" -cp "libs/*" $(find . -name "*.java")
+if [ ! -d "$OUT_DIR" ]; then
+    mkdir -p "$OUT_DIR"
+fi
+
+if [ -z "$(ls -A "$OUT_DIR")" ]; then
+    echo "Compiling Java files into $OUT_DIR..."
+    javac -d "$OUT_DIR" -cp "libs/*" $(find . -name "*.java")
+    echo "Compilation complete."
+else
+    echo "Using existing compiled classes in $OUT_DIR."
+fi
 
 echo ""
 
 if [ "$TEST_FLAG" = true ]; then
     echo "Running Tests"
-    java -cp "$TMP_DIR:libs/*" Impl/Program true
+    java -cp "$OUT_DIR:libs/*" Impl/Program true
 else
     echo "Running Program"
-    java -cp "$TMP_DIR:libs/*" Impl/Program
+    java -cp "$OUT_DIR:libs/*" Impl/Program
 fi
 
 echo ""
