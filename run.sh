@@ -19,18 +19,6 @@ done
 
 OUT_DIR="./out"
 
-if [ ! -d "$OUT_DIR" ]; then
-    mkdir -p "$OUT_DIR"
-fi
-
-if [ -z "$(ls -A "$OUT_DIR")" ]; then
-    echo "Compiling Java files into $OUT_DIR..."
-    javac -d "$OUT_DIR" -cp "libs/*" $(find . -name "*.java")
-    echo "Compilation complete."
-else
-    echo "Using existing compiled classes in $OUT_DIR."
-fi
-
 echo ""
 
 if [ "$TEST_FLAG" = true ]; then
